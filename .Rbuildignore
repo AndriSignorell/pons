@@ -3,5 +3,8 @@
 ^README\.Rmd$
 ^\.positai$
 ^\.claude$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
 Rplots.pdf
 prepare.R
