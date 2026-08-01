@@ -173,7 +173,7 @@ xlImport <- function(xl = NULL) {
 #'
 #' Reads the values of an Excel range via RDCOMClient and returns them in a
 #' lightweight container for further processing by \code{\link{xlParseRange}}.
-#' No type conversion or reshaping happens here; the raw \code{Value2()} data
+#' No type conversion or reshaping happens here. The raw \code{Value2()} data
 #' is kept as-is together with the range geometry and metadata.
 #'
 #' A selection may consist of several disjoint \emph{areas} (e.g. \code{A1:A4}
