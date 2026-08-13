@@ -2,6 +2,14 @@
 
 S3method(toWrd,character)
 S3method(toWrd,default)
+S3method(xlView,array)
+S3method(xlView,data.frame)
+S3method(xlView,default)
+S3method(xlView,glm)
+S3method(xlView,list)
+S3method(xlView,lm)
+S3method(xlView,matrix)
+S3method(xlView,table)
 export(.setOptionLocal)
 export(.wrdInsertAfter)
 export(bookmarkList)
@@ -33,7 +41,9 @@ export(xlView)
 export(xxlView)
 import(RDCOMClient)
 importFrom(bedrock,setNamesX)
-importFrom(pharos,strLeft)
-importFrom(pharos,strTrim)
+importFrom(pharos,
+  strLeft,
+  strTrim
+)
 importFrom(readxl,read_xlsx)
 importFrom(writexl,write_xlsx)

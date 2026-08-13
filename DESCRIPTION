@@ -1,6 +1,6 @@
 Package: pons
 Title: Interface to MS-Office for the DescToolsX ecosystem
-Version: 0.0.0.907
+Version: 0.0.0.908
 Authors@R: 
     person("Andri", "Signorell", , "andri@signorell.net", role = c("aut", "cre"))
 Description: Provides Office routines used in DescToolsX.
@@ -18,4 +18,4 @@ Additional_repositories: http://www.omegahat.net/R
 URL: https://andrisignorell.github.io/pons/,
             https://github.com/AndriSignorell/pons/
 BugReports: https://github.com/AndriSignorell/pons/issues
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
