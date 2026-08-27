@@ -3,11 +3,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">pons</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.911</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.912</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +15,15 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book"></span></button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-"><li><h6 class="dropdown-header" data-toc-skip>Documentation for version of package:</h6></li>
+    <li><a class="dropdown-item" href="https://andrisignorell.github.io/pons/">Released</a></li>
+    <li><a class="dropdown-item" href="https://andrisignorell.github.io/pons/dev/">In-development</a></li>
+  </ul></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/AndriSignorell/pons/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/AndriSignorell/pons/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -31,9 +35,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="word-sessions">Word Sessions<a class="anchor" aria-label="anchor" href="#word-sessions"></a></h2>
 
-
+      <div class="section-desc"><p>Creating, retrieving, registering and closing a Word instance.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -42,31 +46,10 @@
 
       <dl><dt>
 
-          <code><a href="bookmarkList.html">bookmarkList()</a></code>
+          <code><a href="newWrd.html">newWrd()</a></code>
 
         </dt>
-        <dd>List Word Bookmarks</dd>
-
-        <dt>
-
-          <code><a href="closeWrd.html">closeWrd()</a></code>
-
-        </dt>
-        <dd>Close Word Session</dd>
-
-        <dt>
-
-          <code><a href="closeXl.html">closeXl()</a></code>
-
-        </dt>
-        <dd>Close Excel Session</dd>
-
-        <dt>
-
-          <code><a href="cm_pts_conversion.html">cmToPts()</a></code> <code><a href="cm_pts_conversion.html">ptsToCm()</a></code>
-
-        </dt>
-        <dd>Convert Between Centimeters and Points</dd>
+        <dd>Create a New Word Session</dd>
 
         <dt>
 
@@ -77,41 +60,6 @@
 
         <dt>
 
-          <code><a href="getXl.html">getXl()</a></code>
-
-        </dt>
-        <dd>Get Current Excel Session</dd>
-
-        <dt>
-
-          <code><a href="newWrd.html">newWrd()</a></code>
-
-        </dt>
-        <dd>Create a New Word Session</dd>
-
-        <dt>
-
-          <code><a href="newXl.html">newXl()</a></code>
-
-        </dt>
-        <dd>Create a New Excel Session</dd>
-
-        <dt>
-
-          <code><a href="renameBookmark.html">renameBookmark()</a></code>
-
-        </dt>
-        <dd>Rename a Word Bookmark</dd>
-
-        <dt>
-
-          <code><a href="replaceBookmarkText.html">replaceBookmarkText()</a></code>
-
-        </dt>
-        <dd>Replace Bookmark Text</dd>
-
-        <dt>
-
           <code><a href="setWrd.html">setWrd()</a></code>
 
         </dt>
@@ -119,12 +67,28 @@
 
         <dt>
 
-          <code><a href="setXl.html">setXl()</a></code>
+          <code><a href="closeWrd.html">closeWrd()</a></code>
 
         </dt>
-        <dd>Set Current Excel Session</dd>
+        <dd>Close Word Session</dd>
 
         <dt>
+
+          <code><a href="withWrd.html">withWrd()</a></code>
+
+        </dt>
+        <dd>Temporarily Use a Word Session</dd>
+      </dl></div><div class="section level2">
+      <h2 id="writing-to-word">Writing to Word<a class="anchor" aria-label="anchor" href="#writing-to-word"></a></h2>
+
+      <div class="section-desc"><p>Inserting R content into a document and the constants needed to address the Word object model.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="toWrd.html">toWrd()</a></code>
 
@@ -137,22 +101,17 @@
 
         </dt>
         <dd>Word Constants for RDCOMClient</dd>
+      </dl></div><div class="section level2">
+      <h2 id="word-bookmarks">Word Bookmarks<a class="anchor" aria-label="anchor" href="#word-bookmarks"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Creating, listing, renaming and refilling bookmarks - the mechanism that makes a report updatable in place.</p></div>
 
-          <code><a href="withWrd.html">withWrd()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Temporarily Use a Word Session</dd>
 
-        <dt>
 
-          <code><a href="withXl.html">withXl()</a></code>
 
-        </dt>
-        <dd>Temporarily Use an Excel Session</dd>
-
-        <dt>
+      <dl><dt>
 
           <code><a href="wrdAddBookmark.html">wrdAddBookmark()</a></code>
 
@@ -175,24 +134,105 @@
 
         <dt>
 
+          <code><a href="renameBookmark.html">renameBookmark()</a></code>
+
+        </dt>
+        <dd>Rename a Word Bookmark</dd>
+
+        <dt>
+
+          <code><a href="bookmarkList.html">bookmarkList()</a></code>
+
+        </dt>
+        <dd>List Word Bookmarks</dd>
+
+        <dt>
+
+          <code><a href="replaceBookmarkText.html">replaceBookmarkText()</a></code>
+
+        </dt>
+        <dd>Replace Bookmark Text</dd>
+
+        <dt>
+
           <code><a href="wrdGoto.html">wrdGoto()</a></code>
 
         </dt>
         <dd>Go to a Word Object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="excel-sessions">Excel Sessions<a class="anchor" aria-label="anchor" href="#excel-sessions"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Creating, retrieving, registering and terminating an Excel instance.</p></div>
 
-          <code><a href="xlDataTransferDialog.html">xlDataTransferDialog()</a></code>
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="newXl.html">newXl()</a></code>
 
         </dt>
-        <dd>Excel Data Transfer Dialog</dd>
+        <dd>Create a New Excel Session</dd>
 
         <dt>
+
+          <code><a href="getXl.html">getXl()</a></code>
+
+        </dt>
+        <dd>Get Current Excel Session</dd>
+
+        <dt>
+
+          <code><a href="setXl.html">setXl()</a></code>
+
+        </dt>
+        <dd>Set Current Excel Session</dd>
+
+        <dt>
+
+          <code><a href="closeXl.html">closeXl()</a></code>
+
+        </dt>
+        <dd>Close Excel Session</dd>
+
+        <dt>
+
+          <code><a href="withXl.html">withXl()</a></code>
+
+        </dt>
+        <dd>Temporarily Use an Excel Session</dd>
+
+        <dt>
+
+          <code><a href="xlKill.html">xlKill()</a></code>
+
+        </dt>
+        <dd>Terminate all Microsoft Excel processes</dd>
+      </dl></div><div class="section level2">
+      <h2 id="reading-from-excel">Reading from Excel<a class="anchor" aria-label="anchor" href="#reading-from-excel"></a></h2>
+
+      <div class="section-desc"><p>Transferring the selected range - including disjoint multi-area selections - into a data frame, matrix, list or table.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="xlGetRange.html">xlGetRange()</a></code>
 
         </dt>
         <dd>Read the Raw Values of the Selected Excel Range(s)</dd>
+
+        <dt>
+
+          <code><a href="xlParseRange.html">xlParseRange()</a></code>
+
+        </dt>
+        <dd>Organize a Raw Excel Range into a data.frame, matrix, list or table</dd>
 
         <dt>
 
@@ -203,19 +243,21 @@
 
         <dt>
 
-          <code><a href="xlKill.html">xlKill()</a></code>
+          <code><a href="xlDataTransferDialog.html">xlDataTransferDialog()</a></code>
 
         </dt>
-        <dd>Terminate all Microsoft Excel processes</dd>
+        <dd>Excel Data Transfer Dialog</dd>
+      </dl></div><div class="section level2">
+      <h2 id="writing-to-excel">Writing to Excel<a class="anchor" aria-label="anchor" href="#writing-to-excel"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Opening R objects and fitted models in a spreadsheet for inspection.</p></div>
 
-          <code><a href="xlParseRange.html">xlParseRange()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Organize a Raw Excel Range into a data.frame, matrix, list or table</dd>
 
-        <dt>
+
+
+      <dl><dt>
 
           <code><a href="xlView.html">xlView()</a></code>
 
@@ -228,8 +270,25 @@
 
         </dt>
         <dd>Run xlView() on selected text.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="unit-conversion">Unit Conversion<a class="anchor" aria-label="anchor" href="#unit-conversion"></a></h2>
+
+      <div class="section-desc"><p>Converting between the length units used by the Office object models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="cm_pts_conversion.html">cmToPts()</a></code> <code><a href="cm_pts_conversion.html">ptsToCm()</a></code>
+
+        </dt>
+        <dd>Convert Between Centimeters and Points</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

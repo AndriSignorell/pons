@@ -1,4 +1,112 @@
 url: https://andrisignorell.github.io/pons/
-template:
-  bootstrap: 5
 
+home:
+  title: pons
+  description: Interface to Microsoft Word and Excel for the DescToolsX ecosystem
+
+destination: docs
+
+development:
+  mode: auto
+
+template:
+  default_assets: true
+  bootstrap: 5
+  bootswatch: flatly
+
+navbar:
+  structure:
+    left:  [version, home, reference, news]
+    right: [github]
+  components:
+    version:
+      icon: fa-book
+      menu:
+      - text: "Documentation for version of package:"
+      - text: Released
+        href: https://andrisignorell.github.io/pons/
+      - text: In-development
+        href: https://andrisignorell.github.io/pons/dev/
+
+# About package ==============================================================
+reference:
+- title: Word Sessions
+  desc: >
+    Creating, retrieving, registering and closing a Word instance.
+  contents:
+  # word.session -- Session handles
+  - newWrd
+  - getWrd
+  - setWrd
+  - closeWrd
+  # word.session.scope -- Scoped evaluation
+  - withWrd
+
+- title: Writing to Word
+  desc: >
+    Inserting R content into a document and the constants needed to
+    address the Word object model.
+  contents:
+  # word.output -- Content insertion
+  - toWrd
+  # word.constants -- Word object model enumerations
+  - wdConst
+
+- title: Word Bookmarks
+  desc: >
+    Creating, listing, renaming and refilling bookmarks - the mechanism
+    that makes a report updatable in place.
+  contents:
+  # word.bookmark.manage -- Creating and removing bookmarks
+  - wrdAddBookmark
+  - wrdBookmark
+  - wrdDeleteBookmark
+  - renameBookmark
+  # word.bookmark.content -- Reading and replacing bookmark content
+  - bookmarkList
+  - replaceBookmarkText
+  # word.navigation -- Moving the selection
+  - wrdGoto
+
+- title: Excel Sessions
+  desc: >
+    Creating, retrieving, registering and terminating an Excel instance.
+  contents:
+  # excel.session -- Session handles
+  - newXl
+  - getXl
+  - setXl
+  - closeXl
+  # excel.session.scope -- Scoped evaluation
+  - withXl
+  # excel.session.process -- Process control
+  - xlKill
+
+- title: Reading from Excel
+  desc: >
+    Transferring the selected range - including disjoint multi-area
+    selections - into a data frame, matrix, list or table.
+  contents:
+  # excel.read.raw -- Raw range access
+  - xlGetRange
+  # excel.read.parse -- Structuring the raw range
+  - xlParseRange
+  # excel.read.interactive -- Dialog-driven import
+  - xlImport
+  - xlDataTransferDialog
+
+- title: Writing to Excel
+  desc: >
+    Opening R objects and fitted models in a spreadsheet for inspection.
+  contents:
+  # excel.view -- Viewing objects in Excel
+  - xlView.glm
+  # excel.addin -- RStudio addin
+  - xxlView
+
+- title: Unit Conversion
+  desc: >
+    Converting between the length units used by the Office object models.
+  contents:
+  # office.units -- Centimeters and typographic points
+  - cm_pts_conversion
