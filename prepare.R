@@ -18,6 +18,16 @@ devtools::load_all()
 devtools::check()
 
 
+pkgdown::build_home()
+pkgdown::build_site()
+usethis::use_pkgdown_github_pages()
+
+pkgdown::build_reference_index()
+pkgdown::build_favicons(overwrite = TRUE)
+
+
+
+
 install.packages("remotes")
 remotes::install_github("omegahat/RDCOMClient")
 

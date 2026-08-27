@@ -1,9 +1,18 @@
 Package: pons
-Title: Interface to MS-Office for the DescToolsX ecosystem
-Version: 0.0.0.908
+Title: Interface to Microsoft Office for the 'DescToolsX' Ecosystem
+Version: 0.0.0.909
 Authors@R: 
     person("Andri", "Signorell", , "andri@signorell.net", role = c("aut", "cre"))
-Description: Provides Office routines used in DescToolsX.
+Description: Connects R to Microsoft Word and Excel on Windows through
+    the Component Object Model. Content of most common R classes can be
+    written into a running Word document, bookmarks can be created,
+    renamed, located and refilled, and whole reports can therefore be
+    updated in place rather than rebuilt. On the Excel side, the
+    selected range - including disjoint multi-area selections - is read
+    back into a data frame, matrix, list or table, either directly or
+    through an interactive dialog, and R objects can be sent the other
+    way for inspection in a spreadsheet. The package supplies the Office
+    interface used by the DescToolsX ecosystem.
 Depends: R (>= 4.2.0)
 License: GPL (>= 2)
 Encoding: UTF-8
@@ -12,6 +21,7 @@ Imports: RDCOMClient, bedrock, readxl, writexl, pharos
 Suggests:
     testthat (>= 3.0.0), 
     rstudioapi (>= 0.1), manipulate
+Remotes: omegahat/RDCOMClient
 Config/testthat/edition: 3
 LazyData: true
 Additional_repositories: http://www.omegahat.net/R

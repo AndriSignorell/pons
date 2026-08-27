@@ -1,144 +1,127 @@
-# pons <img src="man/figures/logo.png" align="right" height="139" alt="pons hex logo" />
+# 📦 pons <img src="man/figures/logo.png" align="right" height="139" alt="pons logo" />
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![License: GPL (>= 2)](https://img.shields.io/badge/license-GPL%20(%3E%3D%202)-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![R-CMD-check](https://github.com/AndriSignorell/pons/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AndriSignorell/pons/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/pons)](https://CRAN.R-project.org/package=pons)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 <!-- badges: end -->
 
-> **pons** *(Latin: "bridge")* — a bridge between R and Microsoft Office.
+**Title:** Interface to Microsoft Office for the DescToolsX Ecosystem\
+**License:** GPL (≥ 2)
 
-**pons** provides the MS-Office interface routines used throughout the
-[DescToolsX](https://github.com/AndriSignorell) ecosystem. It lets you drive
-Microsoft **Word** and **Excel** from R via
-[RDCOMClient](http://www.omegahat.net/RDCOMClient/): read and write ranges,
-move data both ways, and build reproducible reports without leaving the R
-console.
+## 🧩 Overview
 
-## Features
+`pons` is the bridge between R and Microsoft Office. It writes R results
+into a running Word document and reads Excel selections back into R,
+both through the Component Object Model.
 
-- **Excel data transfer** — read the selected range(s) straight into a
-  `data.frame`, `matrix`, `list` or cross-`table`, with an interactive dialog
-  that also inserts ready-to-run code at your editor cursor.
-- **View data in Excel** — send any data frame to a fresh, formatted worksheet
-  for interactive inspection.
-- **Word automation** — insert text and objects, and create, rename, move to,
-  or delete bookmarks in the active document.
-- **Session management** — get, set, create, close, or temporarily switch the
-  active Word / Excel instance.
+The bookmark functions are what make reporting repeatable: place a
+bookmark once in a Word template, and `replaceBookmarkText()` refills it
+on every run. A report is then updated in place rather than rebuilt from
+scratch, and the layout stays where the author put it.
 
-## Installation
+> **Windows only.** `pons` requires a local installation of Microsoft
+> Office and depends on `RDCOMClient`, which is distributed through the
+> Omegahat repository rather than CRAN.
 
-**pons** is not on CRAN. Install the development version from GitHub:
+📖 **Documentation:** <https://andrisignorell.github.io/pons/>
 
-```r
-# install.packages("remotes")
-remotes::install_github("AndriSignorell/pons")
-```
+## ⚙️ Installation
 
-`RDCOMClient` lives on the Omegahat repository and is Windows-only (it relies on
-COM automation). If it is not pulled in automatically, install it directly:
+`RDCOMClient` first:
 
-```r
+``` r
 install.packages("RDCOMClient", repos = "http://www.omegahat.net/R")
 ```
 
-> **Note.** MS-Office automation requires a local installation of Microsoft
-> Office on Windows. The COM-based functions do not work on macOS or Linux.
+Then:
 
-## Getting data out of Excel
+``` r
+remotes::install_github("AndriSignorell/pons")
+```
 
-Select a range in Excel, then let **pons** bring it into R. The interactive
-importer reads your current selection, asks how to organize it, and either
-returns / assigns the object or drops constructive code at your cursor:
+## 📚 Core Features
 
-```r
+### 🔹 Word Sessions
+
+-   `newWrd()`, `getWrd()`, `setWrd()`, `closeWrd()`, `withWrd()`
+
+### 🔹 Writing to Word
+
+-   `toWrd()` — insert content at the current selection, with methods
+    for character vectors and arbitrary objects, and control over font,
+    paragraph format, style template and bullets
+-   `wdConst` — the Word enumeration constants, so numeric values need
+    not be looked up
+
+### 🔹 Bookmarks
+
+-   `wrdAddBookmark()`, `wrdBookmark()`, `wrdDeleteBookmark()`,
+    `renameBookmark()`
+-   `replaceBookmarkText()` — replace the text while preserving the
+    bookmark, which Word would otherwise discard
+-   `bookmarkList()` — all bookmarks of the document as a data frame
+-   `wrdGoto()` — move the selection to a bookmark or other target
+
+### 🔹 Excel Sessions
+
+-   `newXl()`, `getXl()`, `setXl()`, `closeXl()`, `withXl()`,
+    `xlKill()`
+
+### 🔹 Reading from Excel
+
+-   `xlGetRange()` — raw values of the selection, including disjoint
+    multi-area selections
+-   `xlParseRange()` — organise them into a data frame, matrix, list or
+    table, with header handling and per-column type detection
+-   `xlImport()` — the dialog-driven round trip: read, choose the
+    structure, and either assign the object or insert constructive code
+    at the editor cursor
+-   `xlDataTransferDialog()` — the Tcl/Tk front end used by `xlImport()`
+
+### 🔹 Writing to Excel
+
+-   `xlView()` — open a data frame, matrix, table, vector or nested list
+    in Excel, with methods for `lm` and `glm` that write the coefficient
+    table, optionally with confidence intervals, ANOVA and fitted values
+
+### 🔹 Units
+
+-   `cmToPts()`, `ptsToCm()`
+
+## 🧪 Example
+
+``` r
 library(pons)
 
-xl <- getXl()      # attach the running Excel instance
-xlImport(xl)       # select a range in Excel first, then run this
+# a new document and some content
+wrd <- newWrd()
+toWrd("Results", style = "heading 1")
+toWrd(summary(lm(mpg ~ wt, mtcars)))
+
+# refill a bookmark in a template
+replaceBookmarkText("n_patients", "1'284")
+
+# read the current Excel selection
+xl <- getXl()
+d <- xlParseRange(xlGetRange(xl), as = "data.frame", header = TRUE)
+
+# send a model to Excel
+xlView(glm(am ~ wt, mtcars, family = binomial),
+       conf.level = 0.95, exponentiate = TRUE)
 ```
 
-Prefer to script it? The two building blocks under `xlImport()` are available
-on their own:
+## 🧱 The Suite
 
-```r
-r <- xlGetRange(xl)                            # raw values + metadata
-attr(r, "address")                             # e.g. "A1:B34"
+`pons` builds on `bedrock` and `pharos` and supplies the Office interface
+used by `DescToolsX` and `swissValet`.
 
-xlParseRange(r, as = "data.frame", header = TRUE)
-xlParseRange(r, as = "matrix")
-xlParseRange(r, as = "table")   # 1st column -> rownames, 1st row -> colnames
-```
+## 🙏 Acknowledgements
 
-Several disjoint areas (e.g. `A1:A4` **and** `C3:D5`) are supported too: they
-can be returned as a list of matrices, or bound column-wise into a single
-`data.frame` (shorter columns padded with `NA`).
+Parts of the code and documentation were reviewed with the help of large
+language models (OpenAI Codex, Anthropic Claude). Every suggestion was
+assessed, edited and verified by the maintainer, who remains solely
+responsible for the content of this package.
 
-## Getting data into Excel
+## 📜 License
 
-Push a data frame to a new, formatted worksheet:
-
-```r
-xlView(iris)                    # opens iris in a fresh Excel sheet
-xlView(mtcars, freeze = TRUE)   # with a frozen header row
-```
-
-## Automating Word
-
-Write to the active Word document and manage bookmarks:
-
-```r
-wrd <- newWrd()                          # start a new Word session
-toWrd("Hello World")                     # insert text
-toWrd(c("Line 1", "Line 2"), bullet = TRUE)
-
-wrdAddBookmark("results")                # bookmark the cursor position
-replaceBookmarkText("results", "42%")    # fill it in later
-wrdGoto("results")                       # jump back to it
-```
-
-## Function overview
-
-### Excel
-
-| Function | Purpose |
-|---|---|
-| `xlImport()` | Interactive, dialog-driven import of the selected range |
-| `xlGetRange()` | Read the raw values of the selected range(s) |
-| `xlParseRange()` | Organize raw range data into df / matrix / list / table |
-| `xlDataTransferDialog()` | Tcl/Tk front-end used by `xlImport()` |
-| `xlView()`, `xxlView()` | Open a data frame in Excel |
-| `getXl()`, `setXl()`, `newXl()`, `closeXl()`, `withXl()` | Session management |
-
-### Word
-
-| Function | Purpose |
-|---|---|
-| `toWrd()` | Insert content into the active document |
-| `wrdAddBookmark()`, `wrdBookmark()`, `wrdDeleteBookmark()` | Manage bookmarks |
-| `renameBookmark()`, `replaceBookmarkText()` | Edit bookmarks |
-| `wrdGoto()`, `bookmarkList()` | Navigate / list bookmarks |
-| `wdConst` | Word automation constants |
-| `getWrd()`, `setWrd()`, `newWrd()`, `closeWrd()`, `withWrd()` | Session management |
-
-### Utilities
-
-| Function | Purpose |
-|---|---|
-| `cmToPts()`, `ptsToCm()` | Convert between centimeters and typographic points |
-
-## Related packages
-
-**pons** is part of the **DescToolsX** ecosystem and is built to work alongside
-`bedrock`, `pharos`, and the other component packages.
-
-## Getting help
-
-- Documentation: <https://andrisignorell.github.io/pons/>
-- Bug reports and feature requests:
-  <https://github.com/AndriSignorell/pons/issues>
-
-## License
-
-GPL (>= 2) © Andri Signorell
+GPL (≥ 2)
