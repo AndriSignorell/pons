@@ -1,6 +1,6 @@
 Package: pons
 Title: Interface to Microsoft Office for the 'DescToolsX' Ecosystem
-Version: 0.0.0.910
+Version: 0.0.0.911
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -26,7 +26,7 @@ Suggests:
     testthat (>= 3.0.0), 
     rstudioapi (>= 0.1), manipulate
 Remotes: 
-    omegahat/RDCOMClient, AndriSignorell/bedrock, AndriSignorell/pharos
+    AndriSignorell/RDCOMClient@r46-unicode, AndriSignorell/bedrock, AndriSignorell/pharos
 Config/testthat/edition: 3
 LazyData: true
 Additional_repositories: http://www.omegahat.net/R
