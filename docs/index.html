@@ -18,7 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="pons">
 <meta name="description" content="Interface to Microsoft Word and Excel for the DescToolsX ecosystem">
 <meta property="og:description" content="Interface to Microsoft Word and Excel for the DescToolsX ecosystem">
-<meta property="og:image" content="https://andrisignorell.github.io/pons/logo.png">
+<meta property="og:image" content="/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">pons</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.912</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.914</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,8 +41,8 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book"></span></button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-">
 <li><h6 class="dropdown-header" data-toc-skip>Documentation for version of package:</h6></li>
-    <li><a class="dropdown-item" href="https://andrisignorell.github.io/pons/">Released</a></li>
-    <li><a class="dropdown-item" href="https://andrisignorell.github.io/pons/dev/">In-development</a></li>
+    <li><a class="external-link dropdown-item" href="https://andrisignorell.github.io/pons/">Released</a></li>
+    <li><a class="external-link dropdown-item" href="https://andrisignorell.github.io/pons/dev/">In-development</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
@@ -69,11 +69,11 @@
 <h2 id="jigsaw-overview">🧩 Overview<a class="anchor" aria-label="anchor" href="#jigsaw-overview"></a>
 </h2>
 <p><code>pons</code> is the bridge between R and Microsoft Office. It writes R results into a running Word document and reads Excel selections back into R, both through the Component Object Model.</p>
-<p>The bookmark functions are what make reporting repeatable: place a bookmark once in a Word template, and <code><a href="reference/replaceBookmarkText.html">replaceBookmarkText()</a></code> refills it on every run. A report is then updated in place rather than rebuilt from scratch, and the layout stays where the author put it.</p>
+<p>The bookmark functions are what make reporting repeatable: place a bookmark once in a Word template, and <code><a href="reference/wrdReplaceBookmarkText.html">wrdReplaceBookmarkText()</a></code> refills it on every run. A report is then updated in place rather than rebuilt from scratch, and the layout stays where the author put it.</p>
 <blockquote>
 <p><strong>Windows only.</strong> <code>pons</code> requires a local installation of Microsoft Office and depends on <code>RDCOMClient</code>, which is distributed through the Omegahat repository rather than CRAN.</p>
 </blockquote>
-<p>📖 <strong>Documentation:</strong> <a href="https://andrisignorell.github.io/pons/" class="uri">https://andrisignorell.github.io/pons/</a></p>
+<p>📖 <strong>Documentation:</strong> <a href="https://andrisignorell.github.io/pons/" class="external-link uri">https://andrisignorell.github.io/pons/</a></p>
 </div>
 <div class="section level2">
 <h2 id="gear-installation">⚙️ Installation<a class="anchor" aria-label="anchor" href="#gear-installation"></a>
@@ -112,12 +112,12 @@
 </h3>
 <ul>
 <li>
-<code><a href="reference/wrdAddBookmark.html">wrdAddBookmark()</a></code>, <code><a href="reference/wrdBookmark.html">wrdBookmark()</a></code>, <code><a href="reference/wrdDeleteBookmark.html">wrdDeleteBookmark()</a></code>, <code><a href="reference/renameBookmark.html">renameBookmark()</a></code>
+<code><a href="reference/wrdAddBookmark.html">wrdAddBookmark()</a></code>, <code><a href="reference/wrdBookmark.html">wrdBookmark()</a></code>, <code><a href="reference/wrdDeleteBookmark.html">wrdDeleteBookmark()</a></code>, <code><a href="reference/wrdRenameBookmark.html">wrdRenameBookmark()</a></code>
 </li>
 <li>
-<code><a href="reference/replaceBookmarkText.html">replaceBookmarkText()</a></code> — replace the text while preserving the bookmark, which Word would otherwise discard</li>
+<code><a href="reference/wrdReplaceBookmarkText.html">wrdReplaceBookmarkText()</a></code> — replace the text while preserving the bookmark, which Word would otherwise discard</li>
 <li>
-<code><a href="reference/bookmarkList.html">bookmarkList()</a></code> — all bookmarks of the document as a data frame</li>
+<code><a href="reference/wrdBookmarks.html">wrdBookmarks()</a></code> — all bookmarks of the document as a data frame</li>
 <li>
 <code><a href="reference/wrdGoto.html">wrdGoto()</a></code> — move the selection to a bookmark or other target</li>
 </ul>
@@ -168,7 +168,7 @@
 <h2 id="test_tube-example">🧪 Example<a class="anchor" aria-label="anchor" href="#test_tube-example"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/pons/">pons</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/pons/" class="external-link">pons</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># a new document and some content</span></span>
 <span><span class="va">wrd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/newWrd.html">newWrd</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -176,11 +176,11 @@
 <span><span class="fu"><a href="reference/toWrd.html">toWrd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># refill a bookmark in a template</span></span>
-<span><span class="fu"><a href="reference/replaceBookmarkText.html">replaceBookmarkText</a></span><span class="op">(</span><span class="st">"n_patients"</span>, <span class="st">"1'284"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/wrdReplaceBookmarkText.html">wrdReplaceBookmarkText</a></span><span class="op">(</span><span class="st">"n_patients"</span>, <span class="st">"1'284"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># read the current Excel selection</span></span>
 <span><span class="va">xl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getXl.html">getXl</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/xlParseRange.html">xlParseRange</a></span><span class="op">(</span><span class="fu"><a href="reference/xlGetRange.html">xlGetRange</a></span><span class="op">(</span><span class="va">xl</span><span class="op">)</span>, as <span class="op">=</span> <span class="st">"data.frame"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/xlParseRange.html">xlParseRange</a></span><span class="op">(</span><span class="fu"><a href="reference/xlGetRange.html">xlGetRange</a></span><span class="op">(</span><span class="va">xl</span><span class="op">)</span>, output <span class="op">=</span> <span class="st">"data.frame"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># send a model to Excel</span></span>
 <span><span class="fu"><a href="reference/xlView.html">xlView</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span>

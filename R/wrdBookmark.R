@@ -26,12 +26,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' bookmarkList()
+#' wrdBookmarks()
 #' }
 #'
 
 #' @export
-bookmarkList <- function(wrd = NULL) {
+wrdBookmarks <- function(wrd = NULL) {
   
     wrd <- .resolveWrd(wrd)
     wbms <- .bookmarks(wrd)
@@ -220,11 +220,11 @@ wrdAddBookmark <- function (name, wrd = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' replaceBookmarkText("title", "New title")
+#' wrdReplaceBookmarkText("title", "New title")
 #' }
 #'
 #' @export
-replaceBookmarkText <- function(name, text, wrd = NULL) {
+wrdReplaceBookmarkText <- function(name, text, wrd = NULL) {
   
   wrd <- .resolveWrd(wrd)
   
@@ -249,7 +249,7 @@ replaceBookmarkText <- function(name, text, wrd = NULL) {
 #' its associated text range.
 #'
 #' @param name Existing bookmark name.
-#' @param newname New bookmark name.
+#' @param newName New bookmark name.
 #' @param wrd A Word COM object. If \code{NULL}, the current
 #'   active Word session is used.
 #'
@@ -259,7 +259,7 @@ replaceBookmarkText <- function(name, text, wrd = NULL) {
 #' preserves the bookmark range, deletes the existing bookmark,
 #' and recreates it with the new name.
 #'
-#' If a bookmark with \code{newname} already exists, the function
+#' If a bookmark with \code{newName} already exists, the function
 #' returns \code{FALSE} and leaves the document unchanged.
 #'
 #' @return
@@ -268,12 +268,12 @@ replaceBookmarkText <- function(name, text, wrd = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' renameBookmark("old_name", "new_name")
+#' wrdRenameBookmark("old_name", "new_name")
 #' }
 #'
 
 #' @export
-renameBookmark <- function(name, newname, wrd = NULL) {
+wrdRenameBookmark <- function(name, newName, wrd = NULL) {
   
   wrd <- .resolveWrd(wrd)
   
@@ -291,10 +291,10 @@ renameBookmark <- function(name, newname, wrd = NULL) {
     return(invisible(FALSE))
   }
   
-  if (bookmarks$Exists(newname)) {
+  if (bookmarks$Exists(newName)) {
     
     warning(
-      gettextf("Bookmark %s already exists", newname)
+      gettextf("Bookmark %s already exists", newName)
     )
     
     return(invisible(FALSE))
@@ -306,7 +306,7 @@ renameBookmark <- function(name, newname, wrd = NULL) {
   
   bm$Delete()
   
-  bookmarks$Add(newname, rng)
+  bookmarks$Add(newName, rng)
   
   invisible(TRUE)
   

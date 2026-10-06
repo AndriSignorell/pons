@@ -14,7 +14,7 @@
 }
 
 
-#' @export
+#' @noRd
 .setOptionLocal <- function(...) {
   opts <- list(...)
   stopifnot(length(opts) > 0)

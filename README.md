@@ -15,7 +15,7 @@ into a running Word document and reads Excel selections back into R,
 both through the Component Object Model.
 
 The bookmark functions are what make reporting repeatable: place a
-bookmark once in a Word template, and `replaceBookmarkText()` refills it
+bookmark once in a Word template, and `wrdReplaceBookmarkText()` refills it
 on every run. A report is then updated in place rather than rebuilt from
 scratch, and the layout stays where the author put it.
 
@@ -56,10 +56,10 @@ remotes::install_github("AndriSignorell/pons")
 ### 🔹 Bookmarks
 
 -   `wrdAddBookmark()`, `wrdBookmark()`, `wrdDeleteBookmark()`,
-    `renameBookmark()`
--   `replaceBookmarkText()` — replace the text while preserving the
+    `wrdRenameBookmark()`
+-   `wrdReplaceBookmarkText()` — replace the text while preserving the
     bookmark, which Word would otherwise discard
--   `bookmarkList()` — all bookmarks of the document as a data frame
+-   `wrdBookmarks()` — all bookmarks of the document as a data frame
 -   `wrdGoto()` — move the selection to a bookmark or other target
 
 ### 🔹 Excel Sessions
@@ -99,11 +99,11 @@ toWrd("Results", style = "heading 1")
 toWrd(summary(lm(mpg ~ wt, mtcars)))
 
 # refill a bookmark in a template
-replaceBookmarkText("n_patients", "1'284")
+wrdReplaceBookmarkText("n_patients", "1'284")
 
 # read the current Excel selection
 xl <- getXl()
-d <- xlParseRange(xlGetRange(xl), as = "data.frame", header = TRUE)
+d <- xlParseRange(xlGetRange(xl), output = "data.frame", header = TRUE)
 
 # send a model to Excel
 xlView(glm(am ~ wt, mtcars, family = binomial),

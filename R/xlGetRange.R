@@ -105,11 +105,11 @@ xlImport <- function(xl = NULL) {
 
   # Organize the raw data into the requested structure.
   out <- switch(res$structure,
-                "data.frame"       = xlParseRange(r, as = "data.frame", header = TRUE),
-                "data.frame.nocol" = xlParseRange(r, as = "data.frame", header = FALSE),
-                "matrix"           = xlParseRange(r, as = "matrix"),
-                "table"            = xlParseRange(r, as = "table"),
-                "list"             = xlParseRange(r, as = "list"),
+                "data.frame"       = xlParseRange(r, output = "data.frame", header = TRUE),
+                "data.frame.nocol" = xlParseRange(r, output = "data.frame", header = FALSE),
+                "matrix"           = xlParseRange(r, output = "matrix"),
+                "table"            = xlParseRange(r, output = "table"),
+                "list"             = xlParseRange(r, output = "list"),
                 stop("Unknown structure: ", res$structure)
   )
 
@@ -293,7 +293,7 @@ xlGetRange <- function(xl = NULL, range = NULL) {
 #'
 #' @param x an \code{"XLRange"} object, or a list of them (multi-area), as
 #'   returned by \code{\link{xlGetRange}}.
-#' @param as target structure. One of \code{"data.frame"}, \code{"matrix"},
+#' @param output target structure. One of \code{"data.frame"}, \code{"matrix"},
 #'   \code{"list"}, \code{"table"}.
 #' @param header logical; if \code{TRUE}, the first row is treated as a header
 #'   (column names). Ignored for \code{"table"}, which always uses the first
@@ -312,22 +312,22 @@ xlGetRange <- function(xl = NULL, range = NULL) {
 #' @examples
 #' \dontrun{
 #' r <- xlGetRange(xl)
-#' xlParseRange(r, as = "data.frame", header = TRUE)
-#' xlParseRange(r, as = "matrix")
-#' xlParseRange(r, as = "table")     # first col = rownames, first row = colnames
+#' xlParseRange(r, output = "data.frame", header = TRUE)
+#' xlParseRange(r, output = "matrix")
+#' xlParseRange(r, output = "table")     # first col = rownames, first row = colnames
 #' }
 #'
 #' @export
-xlParseRange <- function(x, as = c("data.frame", "matrix", "list", "table"),
+xlParseRange <- function(x, output = c("data.frame", "matrix", "list", "table"),
                          header = FALSE, convert = TRUE, stringsAsFactors = FALSE) {
 
-  as <- match.arg(as)
+  output <- match.arg(output)
 
   # ---- Multi-area selection: a list of "XLRange" blocks ---------------------
   if (!inherits(x, "XLRange") && is.list(x) &&
       all(vapply(x, inherits, logical(1), "XLRange"))) {
 
-    if (as == "list") {
+    if (output == "list") {
       # Each area becomes its own matrix.
       out <- lapply(x, xlParseRange, as = "matrix",
                     header = header, convert = convert,
@@ -336,7 +336,7 @@ xlParseRange <- function(x, as = c("data.frame", "matrix", "list", "table"),
       return(out)
     }
 
-    if (as == "data.frame") {
+    if (output == "data.frame") {
       # Parse each area as a data.frame, then bind all columns side by side.
       dfs <- lapply(x, xlParseRange, as = "data.frame",
                     header = header, convert = convert,
@@ -367,7 +367,7 @@ xlParseRange <- function(x, as = c("data.frame", "matrix", "list", "table"),
            use.names = FALSE))
 
   # table: first row -> colnames, first column -> rownames, corner A1 dropped.
-  if (as == "table") {
+  if (output == "table") {
     if (nr < 2 || nc < 2)
       stop("A table needs at least 2 rows and 2 columns.")
     rn   <- as.character(cols[[1]][-1])                  # left column, no corner
@@ -395,7 +395,7 @@ xlParseRange <- function(x, as = c("data.frame", "matrix", "list", "table"),
   if (convert)
     cols <- lapply(cols, .xlConvert)
 
-  switch(as,
+  switch(output,
          "matrix" = {
            # Numeric matrix only if every column is numeric, else character.
            out <- if (convert && all(vapply(cols, is.numeric, logical(1))))

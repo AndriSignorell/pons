@@ -6,7 +6,7 @@
 \usage{
 xlParseRange(
   x,
-  as = c("data.frame", "matrix", "list", "table"),
+  output = c("data.frame", "matrix", "list", "table"),
   header = FALSE,
   convert = TRUE,
   stringsAsFactors = FALSE
@@ -16,7 +16,7 @@ xlParseRange(
 \item{x}{an \code{"XLRange"} object, or a list of them (multi-area), as
 returned by \code{\link{xlGetRange}}.}
 
-\item{as}{target structure. One of \code{"data.frame"}, \code{"matrix"},
+\item{output}{target structure. One of \code{"data.frame"}, \code{"matrix"},
 \code{"list"}, \code{"table"}.}
 
 \item{header}{logical; if \code{TRUE}, the first row is treated as a header
@@ -70,9 +70,9 @@ Any other target raises an error for multi-area input.
 \examples{
 \dontrun{
 r <- xlGetRange(xl)
-xlParseRange(r, as = "data.frame", header = TRUE)
-xlParseRange(r, as = "matrix")
-xlParseRange(r, as = "table")     # first col = rownames, first row = colnames
+xlParseRange(r, output = "data.frame", header = TRUE)
+xlParseRange(r, output = "matrix")
+xlParseRange(r, output = "table")     # first col = rownames, first row = colnames
 }
 
 }

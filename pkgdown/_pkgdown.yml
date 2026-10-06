@@ -59,10 +59,10 @@ reference:
   - wrdAddBookmark
   - wrdBookmark
   - wrdDeleteBookmark
-  - renameBookmark
+  - wrdRenameBookmark
   # word.bookmark.content -- Reading and replacing bookmark content
-  - bookmarkList
-  - replaceBookmarkText
+  - wrdBookmarks
+  - wrdReplaceBookmarkText
   # word.navigation -- Moving the selection
   - wrdGoto
 
@@ -75,6 +75,7 @@ reference:
   - getXl
   - setXl
   - closeXl
+  - xxlView
   # excel.session.scope -- Scoped evaluation
   - withXl
   # excel.session.process -- Process control

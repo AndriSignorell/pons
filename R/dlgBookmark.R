@@ -41,7 +41,7 @@ dlgBookmark <- function(){
       else if(action=="rename"){
         newname <- .GetNewName(vn)
         if(!newname==FALSE)
-          renameBookmark(vn, newname)  
+          wrdRenameBookmark(vn, newname)  
       }
     }
   }
@@ -191,7 +191,7 @@ dlgBookmark <- function(){
     stop("no running instance of word found")
   
   # get the bookmarks of current wrd
-  d.bm <- bookmarkList()
+  d.bm <- wrdBookmarks()
   
   if(identical(d.bm, NA))
     d.bm <- data.frame(id=NA, name="[...no bookmarks found!]", pagenr="", type="" )
