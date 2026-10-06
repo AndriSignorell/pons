@@ -11,7 +11,7 @@ both through the Component Object Model.
 
 The bookmark functions are what make reporting repeatable: place a
 bookmark once in a Word template, and
-[`replaceBookmarkText()`](https://andrisignorell.github.io/pons/reference/replaceBookmarkText.md)
+[`wrdReplaceBookmarkText()`](reference/wrdReplaceBookmarkText.md)
 refills it on every run. A report is then updated in place rather than
 rebuilt from scratch, and the layout stays where the author put it.
 
@@ -41,70 +41,63 @@ remotes::install_github("AndriSignorell/pons")
 
 ### 🔹 Word Sessions
 
-- [`newWrd()`](https://andrisignorell.github.io/pons/reference/newWrd.md),
-  [`getWrd()`](https://andrisignorell.github.io/pons/reference/getWrd.md),
-  [`setWrd()`](https://andrisignorell.github.io/pons/reference/setWrd.md),
-  [`closeWrd()`](https://andrisignorell.github.io/pons/reference/closeWrd.md),
-  [`withWrd()`](https://andrisignorell.github.io/pons/reference/withWrd.md)
+- [`newWrd()`](reference/newWrd.md), [`getWrd()`](reference/getWrd.md),
+  [`setWrd()`](reference/setWrd.md),
+  [`closeWrd()`](reference/closeWrd.md),
+  [`withWrd()`](reference/withWrd.md)
 
 ### 🔹 Writing to Word
 
-- [`toWrd()`](https://andrisignorell.github.io/pons/reference/toWrd.md)
-  — insert content at the current selection, with methods for character
-  vectors and arbitrary objects, and control over font, paragraph
-  format, style template and bullets
+- [`toWrd()`](reference/toWrd.md) — insert content at the current
+  selection, with methods for character vectors and arbitrary objects,
+  and control over font, paragraph format, style template and bullets
 - `wdConst` — the Word enumeration constants, so numeric values need not
   be looked up
 
 ### 🔹 Bookmarks
 
-- [`wrdAddBookmark()`](https://andrisignorell.github.io/pons/reference/wrdAddBookmark.md),
-  [`wrdBookmark()`](https://andrisignorell.github.io/pons/reference/wrdBookmark.md),
-  [`wrdDeleteBookmark()`](https://andrisignorell.github.io/pons/reference/wrdDeleteBookmark.md),
-  [`renameBookmark()`](https://andrisignorell.github.io/pons/reference/renameBookmark.md)
-- [`replaceBookmarkText()`](https://andrisignorell.github.io/pons/reference/replaceBookmarkText.md)
-  — replace the text while preserving the bookmark, which Word would
+- [`wrdAddBookmark()`](reference/wrdAddBookmark.md),
+  [`wrdBookmark()`](reference/wrdBookmark.md),
+  [`wrdDeleteBookmark()`](reference/wrdDeleteBookmark.md),
+  [`wrdRenameBookmark()`](reference/wrdRenameBookmark.md)
+- [`wrdReplaceBookmarkText()`](reference/wrdReplaceBookmarkText.md) —
+  replace the text while preserving the bookmark, which Word would
   otherwise discard
-- [`bookmarkList()`](https://andrisignorell.github.io/pons/reference/bookmarkList.md)
-  — all bookmarks of the document as a data frame
-- [`wrdGoto()`](https://andrisignorell.github.io/pons/reference/wrdGoto.md)
-  — move the selection to a bookmark or other target
+- [`wrdBookmarks()`](reference/wrdBookmarks.md) — all bookmarks of the
+  document as a data frame
+- [`wrdGoto()`](reference/wrdGoto.md) — move the selection to a bookmark
+  or other target
 
 ### 🔹 Excel Sessions
 
-- [`newXl()`](https://andrisignorell.github.io/pons/reference/newXl.md),
-  [`getXl()`](https://andrisignorell.github.io/pons/reference/getXl.md),
-  [`setXl()`](https://andrisignorell.github.io/pons/reference/setXl.md),
-  [`closeXl()`](https://andrisignorell.github.io/pons/reference/closeXl.md),
-  [`withXl()`](https://andrisignorell.github.io/pons/reference/withXl.md),
-  [`xlKill()`](https://andrisignorell.github.io/pons/reference/xlKill.md)
+- [`newXl()`](reference/newXl.md), [`getXl()`](reference/getXl.md),
+  [`setXl()`](reference/setXl.md), [`closeXl()`](reference/closeXl.md),
+  [`withXl()`](reference/withXl.md), [`xlKill()`](reference/xlKill.md)
 
 ### 🔹 Reading from Excel
 
-- [`xlGetRange()`](https://andrisignorell.github.io/pons/reference/xlGetRange.md)
-  — raw values of the selection, including disjoint multi-area
-  selections
-- [`xlParseRange()`](https://andrisignorell.github.io/pons/reference/xlParseRange.md)
-  — organise them into a data frame, matrix, list or table, with header
-  handling and per-column type detection
-- [`xlImport()`](https://andrisignorell.github.io/pons/reference/xlImport.md)
-  — the dialog-driven round trip: read, choose the structure, and either
-  assign the object or insert constructive code at the editor cursor
-- [`xlDataTransferDialog()`](https://andrisignorell.github.io/pons/reference/xlDataTransferDialog.md)
-  — the Tcl/Tk front end used by
-  [`xlImport()`](https://andrisignorell.github.io/pons/reference/xlImport.md)
+- [`xlGetRange()`](reference/xlGetRange.md) — raw values of the
+  selection, including disjoint multi-area selections
+- [`xlParseRange()`](reference/xlParseRange.md) — organise them into a
+  data frame, matrix, list or table, with header handling and per-column
+  type detection
+- [`xlImport()`](reference/xlImport.md) — the dialog-driven round trip:
+  read, choose the structure, and either assign the object or insert
+  constructive code at the editor cursor
+- [`xlDataTransferDialog()`](reference/xlDataTransferDialog.md) — the
+  Tcl/Tk front end used by [`xlImport()`](reference/xlImport.md)
 
 ### 🔹 Writing to Excel
 
-- [`xlView()`](https://andrisignorell.github.io/pons/reference/xlView.md)
-  — open a data frame, matrix, table, vector or nested list in Excel,
-  with methods for `lm` and `glm` that write the coefficient table,
-  optionally with confidence intervals, ANOVA and fitted values
+- [`xlView()`](reference/xlView.md) — open a data frame, matrix, table,
+  vector or nested list in Excel, with methods for `lm` and `glm` that
+  write the coefficient table, optionally with confidence intervals,
+  ANOVA and fitted values
 
 ### 🔹 Units
 
-- [`cmToPts()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md),
-  [`ptsToCm()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md)
+- [`cmToPts()`](reference/cm_pts_conversion.md),
+  [`ptsToCm()`](reference/cm_pts_conversion.md)
 
 ## 🧪 Example
 
@@ -118,11 +111,11 @@ toWrd("Results", style = "heading 1")
 toWrd(summary(lm(mpg ~ wt, mtcars)))
 
 # refill a bookmark in a template
-replaceBookmarkText("n_patients", "1'284")
+wrdReplaceBookmarkText("n_patients", "1'284")
 
 # read the current Excel selection
 xl <- getXl()
-d <- xlParseRange(xlGetRange(xl), as = "data.frame", header = TRUE)
+d <- xlParseRange(xlGetRange(xl), output = "data.frame", header = TRUE)
 
 # send a model to Excel
 xlView(glm(am ~ wt, mtcars, family = binomial),

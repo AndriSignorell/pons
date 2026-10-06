@@ -11,7 +11,7 @@ both through the Component Object Model.
 
 The bookmark functions are what make reporting repeatable: place a
 bookmark once in a Word template, and
-[`replaceBookmarkText()`](https://andrisignorell.github.io/pons/reference/replaceBookmarkText.md)
+[`wrdReplaceBookmarkText()`](reference/wrdReplaceBookmarkText.md)
 refills it on every run. A report is then updated in place rather than
 rebuilt from scratch, and the layout stays where the author put it.
 
@@ -41,70 +41,63 @@ remotes::install_github("AndriSignorell/pons")
 
 ### 🔹 Word Sessions
 
-- [`newWrd()`](https://andrisignorell.github.io/pons/reference/newWrd.md),
-  [`getWrd()`](https://andrisignorell.github.io/pons/reference/getWrd.md),
-  [`setWrd()`](https://andrisignorell.github.io/pons/reference/setWrd.md),
-  [`closeWrd()`](https://andrisignorell.github.io/pons/reference/closeWrd.md),
-  [`withWrd()`](https://andrisignorell.github.io/pons/reference/withWrd.md)
+- [`newWrd()`](reference/newWrd.md), [`getWrd()`](reference/getWrd.md),
+  [`setWrd()`](reference/setWrd.md),
+  [`closeWrd()`](reference/closeWrd.md),
+  [`withWrd()`](reference/withWrd.md)
 
 ### 🔹 Writing to Word
 
-- [`toWrd()`](https://andrisignorell.github.io/pons/reference/toWrd.md)
-  — insert content at the current selection, with methods for character
-  vectors and arbitrary objects, and control over font, paragraph
-  format, style template and bullets
+- [`toWrd()`](reference/toWrd.md) — insert content at the current
+  selection, with methods for character vectors and arbitrary objects,
+  and control over font, paragraph format, style template and bullets
 - `wdConst` — the Word enumeration constants, so numeric values need not
   be looked up
 
 ### 🔹 Bookmarks
 
-- [`wrdAddBookmark()`](https://andrisignorell.github.io/pons/reference/wrdAddBookmark.md),
-  [`wrdBookmark()`](https://andrisignorell.github.io/pons/reference/wrdBookmark.md),
-  [`wrdDeleteBookmark()`](https://andrisignorell.github.io/pons/reference/wrdDeleteBookmark.md),
-  [`renameBookmark()`](https://andrisignorell.github.io/pons/reference/renameBookmark.md)
-- [`replaceBookmarkText()`](https://andrisignorell.github.io/pons/reference/replaceBookmarkText.md)
-  — replace the text while preserving the bookmark, which Word would
+- [`wrdAddBookmark()`](reference/wrdAddBookmark.md),
+  [`wrdBookmark()`](reference/wrdBookmark.md),
+  [`wrdDeleteBookmark()`](reference/wrdDeleteBookmark.md),
+  [`wrdRenameBookmark()`](reference/wrdRenameBookmark.md)
+- [`wrdReplaceBookmarkText()`](reference/wrdReplaceBookmarkText.md) —
+  replace the text while preserving the bookmark, which Word would
   otherwise discard
-- [`bookmarkList()`](https://andrisignorell.github.io/pons/reference/bookmarkList.md)
-  — all bookmarks of the document as a data frame
-- [`wrdGoto()`](https://andrisignorell.github.io/pons/reference/wrdGoto.md)
-  — move the selection to a bookmark or other target
+- [`wrdBookmarks()`](reference/wrdBookmarks.md) — all bookmarks of the
+  document as a data frame
+- [`wrdGoto()`](reference/wrdGoto.md) — move the selection to a bookmark
+  or other target
 
 ### 🔹 Excel Sessions
 
-- [`newXl()`](https://andrisignorell.github.io/pons/reference/newXl.md),
-  [`getXl()`](https://andrisignorell.github.io/pons/reference/getXl.md),
-  [`setXl()`](https://andrisignorell.github.io/pons/reference/setXl.md),
-  [`closeXl()`](https://andrisignorell.github.io/pons/reference/closeXl.md),
-  [`withXl()`](https://andrisignorell.github.io/pons/reference/withXl.md),
-  [`xlKill()`](https://andrisignorell.github.io/pons/reference/xlKill.md)
+- [`newXl()`](reference/newXl.md), [`getXl()`](reference/getXl.md),
+  [`setXl()`](reference/setXl.md), [`closeXl()`](reference/closeXl.md),
+  [`withXl()`](reference/withXl.md), [`xlKill()`](reference/xlKill.md)
 
 ### 🔹 Reading from Excel
 
-- [`xlGetRange()`](https://andrisignorell.github.io/pons/reference/xlGetRange.md)
-  — raw values of the selection, including disjoint multi-area
-  selections
-- [`xlParseRange()`](https://andrisignorell.github.io/pons/reference/xlParseRange.md)
-  — organise them into a data frame, matrix, list or table, with header
-  handling and per-column type detection
-- [`xlImport()`](https://andrisignorell.github.io/pons/reference/xlImport.md)
-  — the dialog-driven round trip: read, choose the structure, and either
-  assign the object or insert constructive code at the editor cursor
-- [`xlDataTransferDialog()`](https://andrisignorell.github.io/pons/reference/xlDataTransferDialog.md)
-  — the Tcl/Tk front end used by
-  [`xlImport()`](https://andrisignorell.github.io/pons/reference/xlImport.md)
+- [`xlGetRange()`](reference/xlGetRange.md) — raw values of the
+  selection, including disjoint multi-area selections
+- [`xlParseRange()`](reference/xlParseRange.md) — organise them into a
+  data frame, matrix, list or table, with header handling and per-column
+  type detection
+- [`xlImport()`](reference/xlImport.md) — the dialog-driven round trip:
+  read, choose the structure, and either assign the object or insert
+  constructive code at the editor cursor
+- [`xlDataTransferDialog()`](reference/xlDataTransferDialog.md) — the
+  Tcl/Tk front end used by [`xlImport()`](reference/xlImport.md)
 
 ### 🔹 Writing to Excel
 
-- [`xlView()`](https://andrisignorell.github.io/pons/reference/xlView.md)
-  — open a data frame, matrix, table, vector or nested list in Excel,
-  with methods for `lm` and `glm` that write the coefficient table,
-  optionally with confidence intervals, ANOVA and fitted values
+- [`xlView()`](reference/xlView.md) — open a data frame, matrix, table,
+  vector or nested list in Excel, with methods for `lm` and `glm` that
+  write the coefficient table, optionally with confidence intervals,
+  ANOVA and fitted values
 
 ### 🔹 Units
 
-- [`cmToPts()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md),
-  [`ptsToCm()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md)
+- [`cmToPts()`](reference/cm_pts_conversion.md),
+  [`ptsToCm()`](reference/cm_pts_conversion.md)
 
 ## 🧪 Example
 
@@ -118,11 +111,11 @@ toWrd("Results", style = "heading 1")
 toWrd(summary(lm(mpg ~ wt, mtcars)))
 
 # refill a bookmark in a template
-replaceBookmarkText("n_patients", "1'284")
+wrdReplaceBookmarkText("n_patients", "1'284")
 
 # read the current Excel selection
 xl <- getXl()
-d <- xlParseRange(xlGetRange(xl), as = "data.frame", header = TRUE)
+d <- xlParseRange(xlGetRange(xl), output = "data.frame", header = TRUE)
 
 # send a model to Excel
 xlView(glm(am ~ wt, mtcars, family = binomial),
@@ -151,92 +144,72 @@ GPL (≥ 2)
 
 Creating, retrieving, registering and closing a Word instance.
 
-- [`newWrd()`](https://andrisignorell.github.io/pons/reference/newWrd.md)
-  : Create a New Word Session
-- [`getWrd()`](https://andrisignorell.github.io/pons/reference/getWrd.md)
-  : Get Current Word Session
-- [`setWrd()`](https://andrisignorell.github.io/pons/reference/setWrd.md)
-  : Set Current Word Session
-- [`closeWrd()`](https://andrisignorell.github.io/pons/reference/closeWrd.md)
-  : Close Word Session
-- [`withWrd()`](https://andrisignorell.github.io/pons/reference/withWrd.md)
-  : Temporarily Use a Word Session
+- [`newWrd()`](newWrd.md) : Create a New Word Session
+- [`getWrd()`](getWrd.md) : Get Current Word Session
+- [`setWrd()`](setWrd.md) : Set Current Word Session
+- [`closeWrd()`](closeWrd.md) : Close Word Session
+- [`withWrd()`](withWrd.md) : Temporarily Use a Word Session
 
 ## Writing to Word
 
 Inserting R content into a document and the constants needed to address
 the Word object model.
 
-- [`toWrd()`](https://andrisignorell.github.io/pons/reference/toWrd.md)
-  : Insert Content into Microsoft Word
-- [`wdConst`](https://andrisignorell.github.io/pons/reference/wdConst.md)
-  : Word Constants for RDCOMClient
+- [`toWrd()`](toWrd.md) : Insert Content into Microsoft Word
+- [`wdConst`](wdConst.md) : Word Constants for RDCOMClient
 
 ## Word Bookmarks
 
 Creating, listing, renaming and refilling bookmarks - the mechanism that
 makes a report updatable in place.
 
-- [`wrdAddBookmark()`](https://andrisignorell.github.io/pons/reference/wrdAddBookmark.md)
-  : Add a Word Bookmark
-- [`wrdBookmark()`](https://andrisignorell.github.io/pons/reference/wrdBookmark.md)
-  : Get a Word Bookmark
-- [`wrdDeleteBookmark()`](https://andrisignorell.github.io/pons/reference/wrdDeleteBookmark.md)
-  : Delete a Word Bookmark
-- [`renameBookmark()`](https://andrisignorell.github.io/pons/reference/renameBookmark.md)
-  : Rename a Word Bookmark
-- [`bookmarkList()`](https://andrisignorell.github.io/pons/reference/bookmarkList.md)
-  : List Word Bookmarks
-- [`replaceBookmarkText()`](https://andrisignorell.github.io/pons/reference/replaceBookmarkText.md)
-  : Replace Bookmark Text
-- [`wrdGoto()`](https://andrisignorell.github.io/pons/reference/wrdGoto.md)
-  : Go to a Word Object
+- [`wrdAddBookmark()`](wrdAddBookmark.md) : Add a Word Bookmark
+- [`wrdBookmark()`](wrdBookmark.md) : Get a Word Bookmark
+- [`wrdDeleteBookmark()`](wrdDeleteBookmark.md) : Delete a Word Bookmark
+- [`wrdRenameBookmark()`](wrdRenameBookmark.md) : Rename a Word Bookmark
+- [`wrdBookmarks()`](wrdBookmarks.md) : List Word Bookmarks
+- [`wrdReplaceBookmarkText()`](wrdReplaceBookmarkText.md) : Replace
+  Bookmark Text
+- [`wrdGoto()`](wrdGoto.md) : Go to a Word Object
 
 ## Excel Sessions
 
 Creating, retrieving, registering and terminating an Excel instance.
 
-- [`newXl()`](https://andrisignorell.github.io/pons/reference/newXl.md)
-  : Create a New Excel Session
-- [`getXl()`](https://andrisignorell.github.io/pons/reference/getXl.md)
-  : Get Current Excel Session
-- [`setXl()`](https://andrisignorell.github.io/pons/reference/setXl.md)
-  : Set Current Excel Session
-- [`closeXl()`](https://andrisignorell.github.io/pons/reference/closeXl.md)
-  : Close Excel Session
-- [`withXl()`](https://andrisignorell.github.io/pons/reference/withXl.md)
-  : Temporarily Use an Excel Session
-- [`xlKill()`](https://andrisignorell.github.io/pons/reference/xlKill.md)
-  : Terminate all Microsoft Excel processes
+- [`newXl()`](newXl.md) : Create a New Excel Session
+- [`getXl()`](getXl.md) : Get Current Excel Session
+- [`setXl()`](setXl.md) : Set Current Excel Session
+- [`closeXl()`](closeXl.md) : Close Excel Session
+- [`xxlView()`](xXlView.md) : Run xlView() on selected text.
+- [`withXl()`](withXl.md) : Temporarily Use an Excel Session
+- [`xlKill()`](xlKill.md) : Terminate all Microsoft Excel processes
 
 ## Reading from Excel
 
 Transferring the selected range - including disjoint multi-area
 selections - into a data frame, matrix, list or table.
 
-- [`xlGetRange()`](https://andrisignorell.github.io/pons/reference/xlGetRange.md)
-  : Read the Raw Values of the Selected Excel Range(s)
-- [`xlParseRange()`](https://andrisignorell.github.io/pons/reference/xlParseRange.md)
-  : Organize a Raw Excel Range into a data.frame, matrix, list or table
-- [`xlImport()`](https://andrisignorell.github.io/pons/reference/xlImport.md)
-  : Interactively Import the Selected Excel Range into R
-- [`xlDataTransferDialog()`](https://andrisignorell.github.io/pons/reference/xlDataTransferDialog.md)
-  : Excel Data Transfer Dialog
+- [`xlGetRange()`](xlGetRange.md) : Read the Raw Values of the Selected
+  Excel Range(s)
+- [`xlParseRange()`](xlParseRange.md) : Organize a Raw Excel Range into
+  a data.frame, matrix, list or table
+- [`xlImport()`](xlImport.md) : Interactively Import the Selected Excel
+  Range into R
+- [`xlDataTransferDialog()`](xlDataTransferDialog.md) : Excel Data
+  Transfer Dialog
 
 ## Writing to Excel
 
 Opening R objects and fitted models in a spreadsheet for inspection.
 
-- [`xlView()`](https://andrisignorell.github.io/pons/reference/xlView.md)
-  : View Objects in Excel
-- [`xxlView()`](https://andrisignorell.github.io/pons/reference/xXlView.md)
-  : Run xlView() on selected text.
+- [`xlView()`](xlView.md) : View Objects in Excel
+- [`xxlView()`](xXlView.md) : Run xlView() on selected text.
 
 ## Unit Conversion
 
 Converting between the length units used by the Office object models.
 
-- [`cmToPts()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md)
-  [`ptsToCm()`](https://andrisignorell.github.io/pons/reference/cm_pts_conversion.md)
-  : Convert Between Centimeters and Points
+- [`cmToPts()`](cm_pts_conversion.md)
+  [`ptsToCm()`](cm_pts_conversion.md) : Convert Between Centimeters and
+  Points
 

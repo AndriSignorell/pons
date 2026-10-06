@@ -2,9 +2,8 @@
 
 Modal Tcl/Tk dialog that asks the user how to organize and deliver an
 Excel range that is being transferred to R. It is the interactive
-front-end used by
-[`xlImport`](https://andrisignorell.github.io/pons/reference/xlImport.md)
-and returns the user's choices as a plain list.
+front-end used by [`xlImport`](xlImport.md) and returns the user's
+choices as a plain list.
 
 ## Usage
 
@@ -74,11 +73,11 @@ When `multi = TRUE` (a disjoint multi-area selection), only the
 column-combinable structures are offered - the two `data.frame` variants
 and `list` - and `list` is preselected, because `matrix` and `table` are
 not defined across several areas (see
-[`xlParseRange`](https://andrisignorell.github.io/pons/reference/xlParseRange.md)).
+[`xlParseRange`](xlParseRange.md)).
 
 ## See also
 
-[`xlImport`](https://andrisignorell.github.io/pons/reference/xlImport.md)
+[`xlImport`](xlImport.md)
 
 ## Examples
 

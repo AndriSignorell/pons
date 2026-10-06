@@ -2,9 +2,9 @@
 
 Reads the values of an Excel range via RDCOMClient and returns them in a
 lightweight container for further processing by
-[`xlParseRange`](https://andrisignorell.github.io/pons/reference/xlParseRange.md).
-No type conversion or reshaping happens here. The raw `Value2()` data is
-kept as-is together with the range geometry and metadata.
+[`xlParseRange`](xlParseRange.md). No type conversion or reshaping
+happens here. The raw `Value2()` data is kept as-is together with the
+range geometry and metadata.
 
 ## Usage
 
@@ -49,8 +49,7 @@ as text, and yields a column-wise nested list indexed as
 
 ## See also
 
-[`xlParseRange`](https://andrisignorell.github.io/pons/reference/xlParseRange.md),
-[`xlImport`](https://andrisignorell.github.io/pons/reference/xlImport.md)
+[`xlParseRange`](xlParseRange.md), [`xlImport`](xlImport.md)
 
 ## Examples
 

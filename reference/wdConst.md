@@ -28,7 +28,7 @@ Word enumerations.
 
 ## See also
 
-[`toWrd`](https://andrisignorell.github.io/pons/reference/toWrd.md)
+[`toWrd`](toWrd.md)
 
 ## Examples
 

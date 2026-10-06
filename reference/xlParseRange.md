@@ -1,17 +1,15 @@
 # Organize a Raw Excel Range into a data.frame, matrix, list or table
 
-Turns the raw output of
-[`xlGetRange`](https://andrisignorell.github.io/pons/reference/xlGetRange.md)
-into a proper R object. Handles a single range as well as a multi-area
-selection, with optional header handling and automatic per-column type
-conversion.
+Turns the raw output of [`xlGetRange`](xlGetRange.md) into a proper R
+object. Handles a single range as well as a multi-area selection, with
+optional header handling and automatic per-column type conversion.
 
 ## Usage
 
 ``` r
 xlParseRange(
   x,
-  as = c("data.frame", "matrix", "list", "table"),
+  output = c("data.frame", "matrix", "list", "table"),
   header = FALSE,
   convert = TRUE,
   stringsAsFactors = FALSE
@@ -23,9 +21,9 @@ xlParseRange(
 - x:
 
   an `"XLRange"` object, or a list of them (multi-area), as returned by
-  [`xlGetRange`](https://andrisignorell.github.io/pons/reference/xlGetRange.md).
+  [`xlGetRange`](xlGetRange.md).
 
-- as:
+- output:
 
   target structure. One of `"data.frame"`, `"matrix"`, `"list"`,
   `"table"`.
@@ -98,16 +96,15 @@ Any other target raises an error for multi-area input.
 
 ## See also
 
-[`xlGetRange`](https://andrisignorell.github.io/pons/reference/xlGetRange.md),
-[`xlImport`](https://andrisignorell.github.io/pons/reference/xlImport.md)
+[`xlGetRange`](xlGetRange.md), [`xlImport`](xlImport.md)
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 r <- xlGetRange(xl)
-xlParseRange(r, as = "data.frame", header = TRUE)
-xlParseRange(r, as = "matrix")
-xlParseRange(r, as = "table")     # first col = rownames, first row = colnames
+xlParseRange(r, output = "data.frame", header = TRUE)
+xlParseRange(r, output = "matrix")
+xlParseRange(r, output = "table")     # first col = rownames, first row = colnames
 } # }
 ```

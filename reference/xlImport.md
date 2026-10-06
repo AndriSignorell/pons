@@ -2,11 +2,10 @@
 
 End-to-end, dialog-driven transfer of the currently selected Excel
 range(s) into R. The function reads the selection via
-[`xlGetRange`](https://andrisignorell.github.io/pons/reference/xlGetRange.md),
-asks the user how to organize and deliver the data via
-[`xlDataTransferDialog`](https://andrisignorell.github.io/pons/reference/xlDataTransferDialog.md),
-and then either returns / assigns the resulting object or inserts
-constructive R code at the editor cursor.
+[`xlGetRange`](xlGetRange.md), asks the user how to organize and deliver
+the data via [`xlDataTransferDialog`](xlDataTransferDialog.md), and then
+either returns / assigns the resulting object or inserts constructive R
+code at the editor cursor.
 
 ## Usage
 
@@ -19,8 +18,7 @@ xlImport(xl = NULL)
 - xl:
 
   optional Excel application handle (as returned by
-  [`getXl()`](https://andrisignorell.github.io/pons/reference/getXl.md)).
-  If `NULL`, the running instance is used.
+  [`getXl()`](getXl.md)). If `NULL`, the running instance is used.
 
 ## Value
 
@@ -55,9 +53,8 @@ The dialog offers the following target structures (single range):
   one component per column.
 
 When several disjoint areas are selected, only `data.frame` variants and
-`list` are offered (see
-[`xlParseRange`](https://andrisignorell.github.io/pons/reference/xlParseRange.md)
-for how areas are combined), and `list` is preselected.
+`list` are offered (see [`xlParseRange`](xlParseRange.md) for how areas
+are combined), and `list` is preselected.
 
 Delivery is controlled by two dialog inputs, giving four combinations:
 
@@ -71,9 +68,8 @@ Delivery is controlled by two dialog inputs, giving four combinations:
 
 ## See also
 
-[`xlGetRange`](https://andrisignorell.github.io/pons/reference/xlGetRange.md),
-[`xlParseRange`](https://andrisignorell.github.io/pons/reference/xlParseRange.md),
-[`xlDataTransferDialog`](https://andrisignorell.github.io/pons/reference/xlDataTransferDialog.md)
+[`xlGetRange`](xlGetRange.md), [`xlParseRange`](xlParseRange.md),
+[`xlDataTransferDialog`](xlDataTransferDialog.md)
 
 ## Examples
 
