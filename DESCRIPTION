@@ -1,6 +1,6 @@
 Package: pons
 Title: Interface to Microsoft Office for the 'DescToolsX' Ecosystem
-Version: 0.0.0.914
+Version: 0.0.0.915
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -33,4 +33,4 @@ Additional_repositories: http://www.omegahat.net/R
 URL: https://andrisignorell.github.io/pons/,
             https://github.com/AndriSignorell/pons/
 BugReports: https://github.com/AndriSignorell/pons/issues
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
