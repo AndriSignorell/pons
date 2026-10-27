@@ -329,7 +329,7 @@ xlParseRange <- function(x, output = c("data.frame", "matrix", "list", "table"),
 
     if (output == "list") {
       # Each area becomes its own matrix.
-      out <- lapply(x, xlParseRange, as = "matrix",
+      out <- lapply(x, xlParseRange, output = "matrix",
                     header = header, convert = convert,
                     stringsAsFactors = stringsAsFactors)
       attr(out, "address") <- attr(x, "address")
@@ -338,7 +338,7 @@ xlParseRange <- function(x, output = c("data.frame", "matrix", "list", "table"),
 
     if (output == "data.frame") {
       # Parse each area as a data.frame, then bind all columns side by side.
-      dfs <- lapply(x, xlParseRange, as = "data.frame",
+      dfs <- lapply(x, xlParseRange, output = "data.frame",
                     header = header, convert = convert,
                     stringsAsFactors = stringsAsFactors)
       # Collect every column across areas, pad to the longest with NA, then
@@ -352,7 +352,7 @@ xlParseRange <- function(x, output = c("data.frame", "matrix", "list", "table"),
       return(out)
     }
 
-    stop("Multiple ranges are only supported with as = \"list\" or \"data.frame\".")
+    stop("Multiple ranges are only supported with output = \"list\" or \"data.frame\".")
   }
 
   # ---- Single range ---------------------------------------------------------

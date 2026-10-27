@@ -1,4 +1,4 @@
-# pons (development version)
+# pons 0.0.0.921
 
 ## New features
 
@@ -9,6 +9,10 @@
 - `toWrd()` writes content of the common R classes into a running Word
   document, with control over font, paragraph format, style template and
   bullet lists.
+- `toWrd()` methods for `data.frame`, `matrix`, `table`, `TOne` and `TMod`
+  write formatted tables (header rules, decimal-tab alignment, paragraph
+  spacing); `wrdSymbolMap()` replaces `-`, `=>`, `<=` etc. by their
+  typographic characters.
 - Bookmark handling makes reports updatable in place: `wrdAddBookmark()`,
   `wrdBookmark()`, `renameBookmark()`, `wrdDeleteBookmark()`,
   `bookmarkList()` and `wrdGoto()`. `replaceBookmarkText()` restores the
@@ -22,6 +26,22 @@
   lists in Excel, with methods for `lm` and `glm` that write the
   coefficient table with optional confidence intervals, ANOVA and fitted
   values.
+
+## Bug fixes
+
+- `xlParseRange()` failed on multi-area selections (internal calls used the
+  non-existent argument `as =` instead of `output =`).
+- `wrdSymbolMap()` was broken in non-UTF-8 locales: non-ASCII regex
+  patterns given as argument tags were translated to `<U+2264>` text.
+  The minus rule now also applies after a non-breaking space (`N = -3`).
+- The internal output capture failed on literal constants
+  ("bad argument").
+
+## Internal
+
+- Test suite for all COM-free parts (symbol map, table preparation, the
+  `toWrd()` table methods with a mocked Word layer, `xlParseRange()`, type
+  conversion, deparser, output capture).
 
 ## Acknowledgements
 

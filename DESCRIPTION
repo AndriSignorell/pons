@@ -1,6 +1,6 @@
 Package: pons
 Title: Interface to Microsoft Office for the 'DescToolsX' Ecosystem
-Version: 0.0.0.915
+Version: 0.0.0.921
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -21,16 +21,19 @@ Depends: R (>= 4.2.0)
 License: GPL (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Imports: RDCOMClient, bedrock, pharos, readxl, writexl
-Suggests:
-    testthat (>= 3.0.0), 
-    rstudioapi (>= 0.1), manipulate
-Remotes: 
-    AndriSignorell/RDCOMClient@r46-unicode, AndriSignorell/bedrock, AndriSignorell/pharos
+Imports: RDCOMClient, bedrock, pharos, readxl, stats, writexl
+Suggests: testthat (>= 3.1.7), rstudioapi (>= 0.1), manipulate
+Remotes: AndriSignorell/RDCOMClient@r46-unicode,
+        AndriSignorell/bedrock, AndriSignorell/pharos
 Config/testthat/edition: 3
 LazyData: true
 Additional_repositories: http://www.omegahat.net/R
 URL: https://andrisignorell.github.io/pons/,
-            https://github.com/AndriSignorell/pons/
+        https://github.com/AndriSignorell/pons/
 BugReports: https://github.com/AndriSignorell/pons/issues
 Config/roxygen2/version: 8.1.1
+NeedsCompilation: no
+Packaged: 2026-10-26 14:32:32 UTC; andri
+Author: Andri Signorell [aut, cre] (ORCID:
+    <https://orcid.org/0000-0003-4311-1969>)
+Maintainer: Andri Signorell <andri@signorell.net>

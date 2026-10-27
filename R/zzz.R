@@ -24,7 +24,6 @@ utils::globalVariables("wdConst")
 #' @importFrom readxl read_xlsx
 #' @importFrom writexl write_xlsx
 #' @importFrom pharos strLeft strTrim
-#' @importFrom stats ftable
 #'   
 #' @import RDCOMClient
 NULL           

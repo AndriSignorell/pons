@@ -19,9 +19,6 @@
 #' Character input is inserted directly, while other objects are first converted
 #' to text using an internal capture mechanism.
 #'
-#' UTF-8 strings may be converted to Latin-1 depending on system locale to avoid
-#' encoding issues in Word.
-#'
 #' Formatting options such as paragraph style, font, and bullet lists can be
 #' applied via method-specific arguments.
 #'
@@ -60,15 +57,6 @@ toWrd.character <- function(x, font = NULL, para = NULL,
   
   wrd <- .resolveWrd(wrd)
   
-  # we will convert UTF-8 strings to Latin-1, if the local info is Latin-1
-  if (any(l10n_info()[["Latin-1"]] & Encoding(x) == "UTF-8"))
-    x[Encoding(x) == "UTF-8"] <- iconv(x[Encoding(x) == "UTF-8"], 
-                                       from = "UTF-8", to = "latin1")
-  
-  # handle garbage of special characters inserted on the 
-  # existance of non ASCII characters
-  # wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
-  
   .wrdInsertAfter(paste(x, collapse = "\n"), wrd = wrd)
   
   if (!is.null(style))
@@ -105,49 +93,11 @@ toWrd.character <- function(x, font = NULL, para = NULL,
 # == internal helper functions =============================================
 
 #' @noRd
-.wrdInsertAfter <- function(x, remove=TRUE, wrd){
-  
-  # RDCOMClient together with InsertAfter inserts a number of 
-  # special characters at the end of the inserted text, as soon 
-  # as the the text contains non ascii characters.
-  # 
-  # As we see no solution to avoid this, we try to remove the characters here
-  # by typing backspace.
-  
-  # example
-  # xx <- do.call(gettextf, as.list(c("m\U00A0=\U00A0%s, 
-  #               f\U00A0=\U00A0%s", fm(c(0.568,0.432), fmt="%", d=1))))
-  
-  # Test with: no correction
-  # .wrdInsertAfter(xx, remove=FALSE)  
-  # with correction
-  # .wrdInsertAfter(xx)  
-  
-  
+.wrdInsertAfter <- function(x, wrd){
+
+  # insert at the selection and return the inserted range (selected).
+  # Unicode safe with RDCOMClient >= r46-unicode, older versions appended
+  # garbage characters after non-ASCII text.
   wrd[["Selection"]]$InsertAfter(paste(x, collapse = "\n"))
-  res <- wrd[["Selection"]]$Range()
-  
-  if (remove && getOption("wrdinsert_rm_garbage", TRUE)){
-    
-    # remove selection
-    wrd[["Selection"]]$Collapse(Direction = wdConst$wdCollapseEnd)
-    
-    # Now deleting the special characters
-    if((j <- .countNonASCII(x)) > 0){
-      sapply(seq(j), 
-             function(i) wrd[["Selection"]]$TypeBackspace())
-    }
-    res$Select()
-    
-  }
-  
-  invisible(res)
-  
+  invisible(wrd[["Selection"]]$Range())
 }
-
-
-.countNonASCII <- function(x){
-  nchar(x) - nchar(iconv(x, "UTF-8", "ASCII", ""))
-}
-
-

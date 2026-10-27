@@ -85,10 +85,9 @@
     
     tmp <- if (is.expression(expr)) {
       lapply(expr, evalVis)
-    } else if (is.call(expr) || is.name(expr)) {
-      list(evalVis(expr))
     } else {
-      stop("bad argument")
+      # calls, names and constants (a literal is its own, visible value)
+      list(evalVis(expr))
     }
     
     for (item in tmp) {

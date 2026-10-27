@@ -6,7 +6,20 @@
 \usage{
 wrdSymbolMap()
 }
+\value{
+a named character vector.
+}
 \description{
-Default map of perl regex patterns and their typographic replacements,
-applied in the given order (longer tokens first).
+Default map of perl regex patterns (names) and their typographic
+replacements (values), applied in the given order (longer tokens first).
+}
+\details{
+The map is built with \code{setNames()}: non-ASCII patterns as
+argument tags, \code{c("\\u2264" = ...)}, would be translated to the
+native encoding and broken in non-UTF-8 locales.
+}
+\examples{
+wrdSymbolMap()
+# extend the map
+map <- c(wrdSymbolMap(), "chi2" = "\u03C7\u00B2")
 }

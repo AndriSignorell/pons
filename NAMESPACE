@@ -50,5 +50,4 @@ importFrom(pharos,
   strTrim
 )
 importFrom(readxl,read_xlsx)
-importFrom(stats,ftable)
 importFrom(writexl,write_xlsx)

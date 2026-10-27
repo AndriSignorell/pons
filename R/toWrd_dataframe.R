@@ -25,19 +25,12 @@ toWrd.data.frame <- function(x, font = list(name = "Arial Narrow", size = 10),
   nc <- ncol(x)
   if (is.null(align)) align <- c("l", rep("d", nc - 1L))
   align <- rep_len(align, nc)
+  stopifnot(all(align %in% c("l", "c", "r", "d")),
+            length(halign) == 1L, halign %in% c("l", "c", "r"))
   
-  # cell content: character, NA -> na, no padding, no tabs/linebreaks
-  m <- as.matrix(x)
-  m[is.na(m)] <- na
-  m <- gsub("[\t\r\n]", " ", trimws(m))
-  hd <- gsub("[\t\r\n]", " ", names(x))
-  if (!isFALSE(symbols)) {
-    map <- if (isTRUE(symbols)) wrdSymbolMap() else symbols
-    m[] <- .wrdSymbols(m, map)
-    hd  <- .wrdSymbols(hd, map)
-  }
-  
-  lines <- c(paste(hd, collapse = "\t"), apply(m, 1L, paste, collapse = "\t"))
+  cells <- .wrdTabCells(x, symbols = symbols, na = na)
+  m     <- cells$body
+  lines <- .wrdTabLines(cells)
   rng   <- .wrdInsertRange(paste(lines, collapse = "\r"), wrd = wrd)
   tab   <- rng$ConvertToTable(Separator  = 1L,             # wdSeparateByTabs
                               NumRows    = length(lines),
@@ -101,28 +94,69 @@ toWrd.data.frame <- function(x, font = list(name = "Arial Narrow", size = 10),
 
 #' Symbol Replacements for Word Output
 #'
-#' Default map of perl regex patterns and their typographic replacements,
-#' applied in the given order (longer tokens first).
+#' Default map of perl regex patterns (names) and their typographic
+#' replacements (values), applied in the given order (longer tokens first).
+#'
+#' @details The map is built with \code{setNames()}: non-ASCII patterns as
+#'   argument tags, \code{c("\\u2264" = ...)}, would be translated to the
+#'   native encoding and broken in non-UTF-8 locales.
+#'
+#' @return a named character vector.
+#' @examples
+#' wrdSymbolMap()
+#' # extend the map
+#' map <- c(wrdSymbolMap(), "chi2" = "\u03C7\u00B2")
 #' @export
-wrdSymbolMap <- function() c(
-  "<=>"                        = "\u21D4",   # ⇔
-  "=>"                         = "\u21D2",   # ⇒
-  "<->"                        = "\u2194",   # ↔
-  "->"                         = "\u2192",   # →
-  "<-"                         = "\u2190",   # ←
-  "<="                         = "\u2264",   # ≤
-  ">="                         = "\u2265",   # ≥
-  "!="                         = "\u2260",   # ≠
-  "\\+/-|\\+-"                 = "\u00B1",   # ±
-  "\\.\\.\\."                  = "\u2026",   # …
-  "(?<=\\d)--(?=\\d)"          = "\u2013",   # 1--5  -> 1–5
-  "(?<=\\d) ?x ?(?=\\d)"       = "\u00A0\u00D7\u00A0",  # 2 x 3 -> 2 × 3
-  "\\^2"                       = "\u00B2",   # ²
-  "\\^3"                       = "\u00B3",   # ³
-  "(?<=[pnN]) ?([<=>\u2264\u2265]) ?(?=[\u2212.\\d-])" = "\u00A0\\1\u00A0",
-  # p < 0.001: non-breaking
-  "(^|(?<=[\\s(\\[;,=<>\u2264\u2265]))-(?=[\\d.])" = "\u2212"  # minus
-)
+wrdSymbolMap <- function() {
+
+  map <- matrix(byrow = TRUE, ncol = 2L, c(
+    # pattern                      replacement
+    "<=>",                         "\u21D4",              # double arrow
+    "=>",                          "\u21D2",              # implies
+    "<->",                         "\u2194",
+    "->",                          "\u2192",
+    "<-",                          "\u2190",
+    "<=",                          "\u2264",
+    ">=",                          "\u2265",
+    "!=",                          "\u2260",
+    "\\+/-|\\+-",                  "\u00B1",              # plus-minus
+    "\\.\\.\\.",                   "\u2026",              # ellipsis
+    "(?<=\\d)--(?=\\d)",           "\u2013",              # 1--5 -> en dash
+    "(?<=\\d) ?x ?(?=\\d)",        "\u00A0\u00D7\u00A0",  # 2 x 3
+    "\\^2",                        "\u00B2",
+    "\\^3",                        "\u00B3",
+    # p < 0.001, n = 12: non-breaking spaces around the relation
+    "(?<=[pnN]) ?([<=>\u2264\u2265]) ?(?=[\u2212.\\d-])", "\u00A0\\1\u00A0",
+    # minus sign: at the start or after blank, bracket, separator, relation
+    "(^|(?<=[\\s\u00A0(\\[;,=<>\u2264\u2265]))-(?=[\\d.])", "\u2212"
+  ))
+
+  stats::setNames(map[, 2L], map[, 1L])
+}
+
+#' @noRd
+.wrdTabCells <- function(x, symbols = TRUE, na = "") {
+  # cell content as character matrix: NA -> na, trimmed, no tabs/linebreaks
+  # (they would split cells/rows), symbols replaced
+  m <- as.matrix(x)
+  if (is.null(dim(m))) m <- matrix(m, nrow = NROW(x))
+  m[is.na(m)] <- na
+  m[] <- gsub("[\t\r\n]", " ", trimws(m))
+  hd <- gsub("[\t\r\n]", " ", names(x))
+  if (!isFALSE(symbols)) {
+    map <- if (isTRUE(symbols)) wrdSymbolMap() else symbols
+    m[] <- .wrdSymbols(m, map)
+    hd  <- .wrdSymbols(hd, map)
+  }
+  list(header = hd, body = m)
+}
+
+#' @noRd
+.wrdTabLines <- function(cells) {
+  # one tab separated line per table row, header first
+  c(paste(cells$header, collapse = "\t"),
+    if (nrow(cells$body)) apply(cells$body, 1L, paste, collapse = "\t"))
+}
 
 #' @noRd
 .wrdSymbols <- function(x, map) {
@@ -133,17 +167,14 @@ wrdSymbolMap <- function() c(
 
 #' @noRd
 .wrdInsertRange <- function(txt, wrd) {
-  # insert at the cursor via an explicit range and return exactly that range;
-  # surplus characters (RDCOMClient garbage with non-ASCII) are deleted
+  # insert at the cursor via an explicit range and return that range
   doc <- wrd[["ActiveDocument"]]
   sel <- wrd[["Selection"]]
   sel$Collapse(Direction = wdConst$wdCollapseEnd)
   start <- sel[["Start"]]
   rng <- doc$Range(start, start)
   rng$InsertAfter(txt)
-  end <- start + nchar(txt)
-  if (rng[["End"]] > end) doc$Range(end, rng[["End"]])$Delete()
-  doc$Range(start, end)
+  rng
 }
 
 #' @noRd
@@ -176,141 +207,5 @@ wrdSymbolMap <- function() c(
   L <- max(nchar(sub("\\..*$", "", x)))
   R <- max(nchar(x) - nchar(sub("\\..*$", "", x)))
   max(((colwidth - pad) + (L - R) * cw) / 2, 0)
-}
-
-
-#' @param rownames logical, write the row names as first column.
-#'   Default: \code{TRUE} if \code{x} has row names.
-#' @param rowtitle header of the row name column. Default: the name of the
-#'   row dimension (\code{names(dimnames(x))[1]}), else empty.
-#' @param digits for non-character matrices: passed to \code{format()},
-#'   which formats all cells with a common number of decimals.
-#' @rdname toWrd
-#' @method toWrd matrix
-#' @export
-toWrd.matrix <- function(x, rownames = !is.null(base::rownames(x)),
-                         rowtitle = NULL, digits = NULL, align = NULL,
-                         ..., wrd = NULL) {
-  
-  # cell content as character, NAs preserved for the na argument
-  m <- x
-  if (!is.character(x)) {
-    m <- format(x, digits = digits, trim = TRUE)
-    m[is.na(x)] <- NA
-  }
-  
-  cn <- base::colnames(x)
-  if (is.null(cn)) cn <- rep("", ncol(x))
-  
-  if (rownames) {
-    if (is.null(rowtitle)) rowtitle <- names(dimnames(x))[1L]
-    if (is.null(rowtitle) || is.na(rowtitle)) rowtitle <- ""
-    rn <- base::rownames(x)
-    if (is.null(rn)) rn <- rep("", nrow(x))
-    m  <- cbind(rn, m)
-    cn <- c(rowtitle, cn)
-  }
-  
-  if (is.null(align)) align <- c(if (rownames) "l", rep("d", ncol(x)))
-  
-  d <- as.data.frame(m, stringsAsFactors = FALSE)
-  names(d) <- cn                          # keeps duplicated/empty names
-  
-  toWrd.data.frame(d, align = align, ..., wrd = wrd)
-}
-
-
-#' @details Tables: a 1-dimensional table is written as one column of
-#'   frequencies, a 2-dimensional one like a matrix, higher dimensions are
-#'   flattened with \code{ftable()} first.
-#' @param freqtitle header of the frequency column of a 1-dimensional table.
-#' @rdname toWrd
-#' @method toWrd table
-#' @export
-toWrd.table <- function(x, freqtitle = "Freq", ..., wrd = NULL) {
-  
-  m <- switch(as.character(min(length(dim(x)), 3L)),
-              "1" = matrix(unclass(x), ncol = 1L,
-                           dimnames = c(dimnames(x), list(freqtitle))),
-              "2" = unclass(x),
-              as.matrix(ftable(x))
-  )
-  toWrd.matrix(m, ..., wrd = wrd)
-}
-
-
-
-#' @param indent string replacing the leading blanks of the level rows of
-#'   categorical variables in a \code{TOne} table (blanks would be trimmed).
-#' @param legend logical, write the test legend of a \code{TOne} table below
-#'   the table, in a font 2 pt smaller.
-#' @details \code{TOne} tables (\code{DescToolsX::tOne()}): the column header
-#'   \code{"var"} is left empty, the group columns are right aligned and the
-#'   p-values aligned at the decimal point.
-#' @rdname toWrd
-#' @method toWrd TOne
-#' @export
-toWrd.TOne <- function(x, font = list(name = "Arial Narrow", size = 10),
-                       align = NULL, indent = strrep(" ", 3),
-                       legend = TRUE, ..., wrd = NULL) {
-  
-  wrd <- .resolveWrd(wrd)
-  
-  m   <- unclass(x)
-  leg <- attr(m, "legend")
-  hasTest <- !is.null(leg)
-  
-  cn <- colnames(m)
-  if (is.null(cn)) cn <- rep("", ncol(m))
-  if (identical(cn[1L], "var")) cn[1L] <- ""
-  
-  # level rows are indented with blanks, which toWrd.data.frame() would trim
-  lev <- grepl("^ +", m[, 1L])
-  m[lev, 1L] <- paste0(indent, sub("^ +", "", m[lev, 1L]))
-  
-  if (is.null(align))
-    align <- c("l", rep("r", ncol(m) - 1L - hasTest), if (hasTest) "d")
-  
-  d <- as.data.frame(m, stringsAsFactors = FALSE)
-  names(d) <- cn
-  
-  tab <- toWrd.data.frame(d, font = font, align = align, ..., wrd = wrd)
-  
-  if (legend && hasTest)
-    toWrd.character(c(strsplit(leg, "\n", fixed = TRUE)[[1L]], ""),
-                    font = list(name = font$name, size = font$size - 2),
-                    wrd = wrd)
-  
-  invisible(tab)
-}
-
-
-#' @param naForm,verbose for \code{TMod} tables (\code{alloy::tMod()}):
-#'   passed to its \code{format()} method, as is \code{digits}.
-#' @details \code{TMod} tables: the coefficients and, separated by a rule,
-#'   the model statistics, all model columns aligned at the decimal point.
-#'   The header of the first column is \code{rowtitle}.
-#' @rdname toWrd
-#' @method toWrd TMod
-#' @export
-toWrd.TMod <- function(x, font = list(name = "Arial Narrow", size = 10),
-                       digits = 3, naForm = "-", verbose = NULL,
-                       rowtitle = "", ..., wrd = NULL) {
-  
-  wrd <- .resolveWrd(wrd)
-  
-  # same content as print(), the formatting lives in alloy:::format.TMod
-  f <- format(x, digits = digits, naForm = naForm, verbose = verbose)
-  
-  d <- rbind(f$coef, f$stats)
-  names(d)[1L] <- rowtitle
-  
-  tab <- toWrd.data.frame(d, font = font, ..., wrd = wrd)
-  
-  # rule between coefficients and statistics (row 1 is the header)
-  if (nrow(f$stats))
-    .wrdBorder(tab$Rows(nrow(f$coef) + 2L), -1L)  # wdBorderTop
-  
-  invisible(tab)
 }
 
