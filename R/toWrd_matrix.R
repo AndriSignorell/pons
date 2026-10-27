@@ -9,8 +9,8 @@
 #' @export
 toWrd.matrix <- function(x, font = list(name = "Arial Narrow", size = 10),
                          rownames = !is.null(base::rownames(x)),
-                         rowtitle = NULL, digits = NULL, align = NULL,
-                         ..., wrd = NULL) {
+                         rowtitle = NULL, labels = NULL, digits = NULL,
+                         align = NULL, ..., wrd = NULL) {
 
   # cell content as character, NAs preserved for the na argument
   m <- x
@@ -26,7 +26,7 @@ toWrd.matrix <- function(x, font = list(name = "Arial Narrow", size = 10),
     if (is.null(rowtitle)) rowtitle <- names(dimnames(x))[1L]
     if (is.null(rowtitle) || is.na(rowtitle)) rowtitle <- ""
     rn <- base::rownames(x)
-    if (is.null(rn)) rn <- rep("", nrow(x))
+    rn <- if (is.null(rn)) rep("", nrow(x)) else .relabel(rn, labels)
     m  <- cbind(rn, m)
     cn <- c(rowtitle, cn)
   }

@@ -100,3 +100,22 @@ test_that(".wrdBorder sets style and width of the requested borders", {
   expect_identical(b[["-3"]]$LineWidth, 4L)
   expect_length(tab$rows[[2]]$borders, 0L)
 })
+
+
+test_that(".relabel maps names, leaves unknown ones, ignores unused labels", {
+  rl <- pons:::.relabel
+  x <- c("(Intercept)", "age10", "AIC")
+  expect_identical(rl(x, NULL), x)
+  expect_identical(rl(x, c(age10 = "Age (per 10 years)", unused = "u")),
+                   c("(Intercept)", "Age (per 10 years)", "AIC"))
+  expect_identical(rl(x, c("(Intercept)" = "Intercept")),
+                   c("Intercept", "age10", "AIC"))
+  expect_identical(rl(x, toupper), c("(INTERCEPT)", "AGE10", "AIC"))
+  expect_identical(rl(character(0), c(a = "b")), character(0))
+})
+
+test_that(".relabel rejects unnamed labels and wrong length functions", {
+  expect_error(pons:::.relabel("a", "b"), "named character")
+  expect_error(pons:::.relabel("a", list(a = "b")), "named character")
+  expect_error(pons:::.relabel(c("a", "b"), function(x) "z"), "one label")
+})

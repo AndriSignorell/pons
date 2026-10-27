@@ -135,6 +135,23 @@ wrdSymbolMap <- function() {
 }
 
 #' @noRd
+.relabel <- function(x, labels) {
+  # replace names by labels: named character vector (lookup) or function
+  if (is.null(labels)) return(x)
+  if (is.function(labels)) {
+    res <- as.character(labels(x))
+    if (length(res) != length(x))
+      stop("the labels function must return one label per name")
+    return(res)
+  }
+  if (!is.character(labels) || is.null(names(labels)))
+    stop("labels must be a named character vector or a function")
+  i <- match(x, names(labels))
+  x[!is.na(i)] <- labels[i[!is.na(i)]]
+  x
+}
+
+#' @noRd
 .wrdTabCells <- function(x, symbols = TRUE, na = "") {
   # cell content as character matrix: NA -> na, trimmed, no tabs/linebreaks
   # (they would split cells/rows), symbols replaced

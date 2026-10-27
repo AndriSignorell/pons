@@ -1,4 +1,4 @@
-# pons 0.0.0.921
+# pons 0.0.0.922
 
 ## New features
 
@@ -13,6 +13,9 @@
   write formatted tables (header rules, decimal-tab alignment, paragraph
   spacing); `wrdSymbolMap()` replaces `-`, `=>`, `<=` etc. by their
   typographic characters.
+- `labels` for the `TMod`, `matrix` and `table` methods of `toWrd()`: a
+  named character vector or a function relabels coefficients, statistics
+  or row names.
 - Bookmark handling makes reports updatable in place: `wrdAddBookmark()`,
   `wrdBookmark()`, `renameBookmark()`, `wrdDeleteBookmark()`,
   `bookmarkList()` and `wrdGoto()`. `replaceBookmarkText()` restores the

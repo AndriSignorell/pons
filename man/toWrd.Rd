@@ -33,6 +33,7 @@ toWrd(x, font = NULL, ..., wrd = NULL)
   naForm = "-",
   verbose = NULL,
   rowtitle = "",
+  labels = NULL,
   ...,
   wrd = NULL
 )
@@ -66,6 +67,7 @@ toWrd(x, font = NULL, ..., wrd = NULL)
   font = list(name = "Arial Narrow", size = 10),
   rownames = !is.null(base::rownames(x)),
   rowtitle = NULL,
+  labels = NULL,
   digits = NULL,
   align = NULL,
   ...,
@@ -105,6 +107,12 @@ passed to its \code{format()} method, as is \code{digits}.}
 
 \item{rowtitle}{header of the row name column. Default: the name of the
 row dimension (\code{names(dimnames(x))[1]}), else empty.}
+
+\item{labels}{row labels for \code{TMod} tables and for the row names of
+matrices and tables: a named character vector \code{c(name = "label")}
+(names not found are left as they are, unused labels are ignored, so one
+map can serve several tables), or a function taking and returning the
+names. For \code{TMod} it applies to coefficients and statistics.}
 
 \item{align}{character vector, one per column: "l", "r", "c" or "d"
 (decimal). Default: first column "l", others "d".}

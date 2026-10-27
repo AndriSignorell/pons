@@ -83,6 +83,16 @@ test_that("matrix options: rownames, rowtitle, digits, align, font", {
   expect_identical(rec$args$font, list(name = "Arial", size = 8))
 })
 
+test_that("matrix and table row names can be relabelled", {
+  rec <- capture_df()
+  m <- matrix(1:2, 2, dimnames = list(c("a", "b"), "v"))
+  toWrd(m, labels = c(b = "Beta"))
+  expect_identical(rec$x[[1]], c("a", "Beta"))
+
+  toWrd(table(sex = c("f", "m", "m")), labels = c(f = "female", m = "male"))
+  expect_identical(rec$x$sex, c("female", "male"))
+})
+
 test_that("a matrix without dimnames gets empty headers and no row column", {
   rec <- capture_df()
   toWrd(matrix(1:4, 2))
@@ -222,6 +232,15 @@ test_that("TMod: format arguments and rowtitle are passed on", {
   expect_identical(rec$fmtArgs,
                    list(digits = 2, naForm = "", verbose = TRUE))
   expect_identical(names(rec$x)[1], "Coefficients")
+})
+
+test_that("TMod: labels apply to coefficients and statistics", {
+  rec <- capture_df()
+  toWrd(tmod(rec), labels = c(age = "Age (years)", N = "n", foo = "bar"))
+  expect_identical(rec$x[[1]], c("(Intercept)", "Age (years)", "AIC", "n"))
+
+  toWrd(tmod(rec), labels = function(x) sub("[()]", "", x))
+  expect_identical(rec$x[[1]][1], "Intercept)")
 })
 
 test_that("TMod without statistics has no rule", {
