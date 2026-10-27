@@ -1,4 +1,4 @@
-# pons 0.0.0.922
+# pons 0.0.0.925
 
 ## New features
 
@@ -16,6 +16,15 @@
 - `labels` for the `TMod`, `matrix` and `table` methods of `toWrd()`: a
   named character vector or a function relabels coefficients, statistics
   or row names.
+- `toWrd(..., bookmark = "name")` encloses the output of any method in a
+  Word bookmark; an existing bookmark is replaced in place, so re-running
+  a script updates the report. `bookmark = TRUE` generates a name. The
+  RStudio addins for text bookmarks use this mechanism.
+- Plots for Word: `toWrd()` inserts captured plotting code (`wrdPlot()`),
+  recorded base graphics (`recordPlot()`), `ggplot` and `trellis` objects
+  as pictures of a given size in cm (png, emf or svg), aligned and
+  bookmarkable (generated names start with `bmp`). The RStudio plot
+  bookmark addins use this instead of the former `ToWrdPlot()`.
 - Bookmark handling makes reports updatable in place: `wrdAddBookmark()`,
   `wrdBookmark()`, `renameBookmark()`, `wrdDeleteBookmark()`,
   `bookmarkList()` and `wrdGoto()`. `replaceBookmarkText()` restores the
@@ -30,7 +39,16 @@
   coefficient table with optional confidence intervals, ANOVA and fitted
   values.
 
+## Documentation
+
+- New vignette "Reporting to Word with pons": a short analysis of the
+  `infert` data reported to Word, demonstrating all `toWrd()` options,
+  plots and updatable bookmarks.
+
 ## Bug fixes
+
+- The RStudio addin "To Word" pointed to the non-existent `ToWrd()`; it now
+  calls the new `xtoWrd()`.
 
 - `xlParseRange()` failed on multi-area selections (internal calls used the
   non-existent argument `as =` instead of `output =`).

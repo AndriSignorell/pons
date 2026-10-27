@@ -243,6 +243,12 @@ test_that("TMod: labels apply to coefficients and statistics", {
   expect_identical(rec$x[[1]][1], "Intercept)")
 })
 
+test_that("TMod: a missing format.TMod() gives a clear error", {
+  capture_df()
+  x <- structure(list(1, 2), class = c("NoFmtTMod", "TMod"))
+  expect_error(toWrd(x), "format.TMod")
+})
+
 test_that("TMod without statistics has no rule", {
   rec <- capture_df()
   tab <- toWrd(tmod(rec, stats = FALSE))
@@ -257,4 +263,81 @@ test_that("toWrd.default writes the printed output as text", {
   rec <- capture_df()
   toWrd(1:3)
   expect_match(paste(rec$text, collapse = "\n"), "[1] 1 2 3", fixed = TRUE)
+})
+
+
+# == bookmarks ================================================================
+
+# a fake document: bookmarks and ranges are recorded, the cursor moves by
+# the number of characters "written"
+fakeDoc <- function(existing = character()) {
+  st <- fakeCOM(pos = 10, added = list(), deleted = 0L, selected = NULL)
+  rangeOf <- function(s, e) fakeCOM(Start = s, End = e)
+  bm <- function(name) {
+    r <- fakeCOM(Start = 20, End = 30)
+    r$Tables <- fakeCOM(Count = 2L, Item = function(i)
+      fakeCOM(Delete = function() st$deleted <- st$deleted + 1L))
+    r$Delete <- function() st$deleted <- st$deleted + 10L
+    r$Select <- function() st$selected <- name
+    fakeCOM(Range = r)
+  }
+  bms <- fakeCOM(
+    Exists = function(n) n %in% existing,
+    Item   = bm,
+    Add    = function(n, r) st$added[[n]] <- c(r$Start, r$End))
+  doc <- fakeCOM(Bookmarks = bms, Range = rangeOf)
+  sel <- fakeCOM(Collapse = function(...) NULL)
+  makeActiveBinding("Start", function() st$pos, sel)
+  wrd <- fakeCOM(ActiveDocument = doc, Selection = sel)
+  list(wrd = wrd, st = st)
+}
+
+test_that("bookmark encloses the output of any method", {
+  fd <- fakeDoc()
+  local_mocked_bindings(
+    .resolveWrd     = function(wrd) fd$wrd,
+    toWrd.character = function(x, ..., wrd = NULL) {
+      fd$st$pos <- fd$st$pos + sum(nchar(x)); "written"
+    })
+  res <- toWrd("abcde", bookmark = "bmtTest")
+  expect_identical(as.vector(res), "bmtTest")
+  expect_identical(attr(res, "result"), "written")
+  expect_identical(fd$st$added, list(bmtTest = c(10, 15)))
+  expect_identical(fd$st$deleted, 0L)
+})
+
+test_that("an existing bookmark is cleared (tables first) and rewritten", {
+  fd <- fakeDoc(existing = "bmtOld")
+  local_mocked_bindings(
+    .resolveWrd     = function(wrd) fd$wrd,
+    toWrd.character = function(x, ..., wrd = NULL) NULL)
+  toWrd("x", bookmark = "bmtOld")
+  expect_identical(fd$st$deleted, 12L)                  # 2 tables + text
+  expect_identical(fd$st$selected, "bmtOld")
+  expect_named(fd$st$added, "bmtOld")
+})
+
+test_that("bookmark is removed from the method arguments, font kept if given", {
+  fd <- fakeDoc()
+  rec <- new.env()
+  local_mocked_bindings(
+    .resolveWrd      = function(wrd) fd$wrd,
+    toWrd.data.frame = function(x, ..., wrd = NULL) { rec$args <- list(...); NULL })
+  toWrd(data.frame(a = 1), bookmark = "b1", na = "-")
+  expect_identical(rec$args, list(na = "-"))           # method default font
+  toWrd(data.frame(a = 1), font = list(size = 8), bookmark = "b1")
+  expect_identical(rec$args, list(font = list(size = 8)))
+})
+
+test_that("bookmark names: TRUE generates one, invalid names are rejected", {
+  nm <- pons:::.wrdBookmarkName
+  expect_match(nm(TRUE), "^bmt[0-9]{9}$")
+  expect_identical(nm("Coefs_2"), "Coefs_2")
+  expect_identical(nm(strrep("a", 40)), strrep("a", 40))
+  expect_error(nm(strrep("a", 41)), "bookmark")
+  expect_error(nm("_hidden"), "bookmark")
+  expect_error(nm("1st"), "bookmark")
+  expect_error(nm("a b"), "bookmark")
+  expect_error(nm(c("a", "b")), "bookmark")
+  expect_error(nm(FALSE), "bookmark")
 })

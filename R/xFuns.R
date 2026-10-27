@@ -5,6 +5,11 @@
 xxlView <- function()  .execFunction("pons::xlView")
 
 
+#' Run toWrd() on selected text.
+#' @export
+xtoWrd <- function()  .execFunction("pons::toWrd")
+
+
 
 
 # == internal helper functions =================================================

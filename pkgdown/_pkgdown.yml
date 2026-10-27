@@ -65,6 +65,7 @@ reference:
   - wrdReplaceBookmarkText
   # word.navigation -- Moving the selection
   - wrdGoto
+  - wrdSymbolMap
 
 - title: Excel Sessions
   desc: >

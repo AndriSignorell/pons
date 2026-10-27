@@ -12,8 +12,8 @@ ToWrdWithBookmark <- function(){
   
   sel <- rstudioapi::getActiveDocumentContext()$selection[[1]]$text
   if(sel != "") {
-    bm <- eval(parse(text=gettextf("bm <- pons::ToWrdB({%s})", sel)))
-    rstudioapi::modifyRange(gettextf("## BookmarkName: %s\n{\n%s}\n", bm$name(), sel))
+    bm <- eval(parse(text=gettextf("pons::toWrd({%s}, bookmark = TRUE)", sel)))
+    rstudioapi::modifyRange(gettextf("## BookmarkName: %s\n{\n%s}\n", bm, sel))
     
   } else {
     cat("No selection!\n")
@@ -29,9 +29,9 @@ ToWrdPlotWithBookmark <- function(){
   
   sel <- rstudioapi::getActiveDocumentContext()$selection[[1]]$text
   if(sel != "") {
-    bm <- eval(parse(text=gettextf("bm <- pons::ToWrdPlot(%s)", sQuote(gettextf("{%s}", sel)))))
-    rstudioapi::modifyRange(gettextf("## BookmarkName: %s (width=15)\n{\n%s}\n", 
-                                     bm$bookmark$name(), sel))
+    bm <- eval(parse(text=gettextf("pons::toWrd(pons::wrdPlot({%s}), width = 15, bookmark = TRUE)", sel)))
+    rstudioapi::modifyRange(gettextf("## BookmarkName: %s (width = 15)\n{\n%s}\n", 
+                                     bm, sel))
     
   } else {
     cat("No selection!\n")
@@ -93,18 +93,17 @@ UpdateBookmark <- function(){
 }
 
 
-.updateBookmark <- function(bm, wrd=.getOptionLocal("lastWord")){
+.updateBookmark <- function(bm, wrd = NULL){
   
   with(bm, {
     
-    pons::wrdGoto(name = name)
-    wrd[["Selection"]]$delete()
-    
-    if(type=="bmt") {         # text bookmark
-      eval(parse(text=gettextf('pons::ToWrdB({%s}, bookmark="%s" %s)', code, name, args)))
+    if(type=="bmt") {         # text bookmark: toWrd() replaces the content
+      eval(parse(text=gettextf('pons::toWrd({%s}, bookmark="%s" %s, wrd = wrd)',
+                               code, name, args)))
       
-    } else if(type=="bmp") {  # plot bookmark
-      eval(parse(text=gettextf("pons::ToWrdPlot(%s, bookmark='%s' %s)", sQuote(gettextf("{%s}", code)), name, args)))
+    } else if(type=="bmp") {  # plot bookmark: toWrd() replaces the picture
+      eval(parse(text=gettextf('pons::toWrd(pons::wrdPlot({%s}), bookmark="%s" %s, wrd = wrd)',
+                               code, name, args)))
       
     } else {
       warning(gettextf("unknown bookmark type %s", type)) # warning("unknown bookmark type")

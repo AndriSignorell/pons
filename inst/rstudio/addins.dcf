@@ -18,7 +18,7 @@ Interactive: false
 Name: To Word
 Title: Send To Word
 Description: Send output of the selected object to Word
-Binding: ToWrd
+Binding: xtoWrd
 Interactive: false
 
 

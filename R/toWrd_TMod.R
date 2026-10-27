@@ -19,6 +19,9 @@ toWrd.TMod <- function(x, font = list(name = "Arial Narrow", size = 10),
 
   # same content as print(), the formatting lives in alloy:::format.TMod
   f <- format(x, digits = digits, naForm = naForm, verbose = verbose)
+  if (!is.list(f) || !all(c("coef", "stats") %in% names(f)))
+    stop("format() for TMod objects not found: alloy >= the version ",
+         "providing format.TMod() is required")
 
   d <- rbind(f$coef, f$stats)
   d[[1L]] <- .relabel(d[[1L]], labels)

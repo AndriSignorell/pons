@@ -1,0 +1,279 @@
+---
+title: "Reporting to Word with pons"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reporting to Word with pons}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+# the code needs Windows, a running MS Word and RDCOMClient:
+# it is shown, not run
+knitr::opts_chunk$set(eval = FALSE, collapse = TRUE, comment = "#>")
+```
+
+`toWrd()` writes R output into a running Word document: text, tables,
+model comparisons, descriptive "Table 1"s and plots. Every call can be
+placed in a bookmark and is then **updated in place** when it is run again,
+so the report follows the analysis script instead of being rebuilt by hand.
+
+This vignette walks through a short analysis of the `infert` data
+(infertility after spontaneous and induced abortion, a matched
+case-control study) and reports each step to Word. `tOne()` comes from
+**DescToolsX**, `tMod()` from **alloy**.
+
+```{r packages}
+library(pons)
+library(DescToolsX)     # tOne()
+library(alloy)          # tMod()
+```
+
+
+## 1  Start a document
+
+`newWrd()` starts Word with an empty document and registers it as the
+current session; all later calls write there without passing `wrd`.
+`getWrd()` attaches to a running Word instead.
+
+```{r session}
+wrd <- newWrd()
+```
+
+Text is inserted at the cursor. `style` takes a Word style, preferably as
+built-in constant, as the style names depend on the language of Word
+("Heading 1", "Überschrift 1"):
+
+```{r text}
+toWrd("Infertility after abortion\n", style = wdConst$wdStyleTitle)
+toWrd("Data and methods\n", style = wdConst$wdStyleHeading1)
+
+toWrd(c("Matched case-control study, 248 women:",
+        "83 cases of infertility, 165 controls",
+        "risk factors: age, parity, induced and spontaneous abortions",
+        ""), bullet = TRUE)
+
+# printed R output in a fixed font: objects are printed, for functions
+# that only print (as str()) capture the output first
+toWrd(summary(infert$age), font = "fix")
+toWrd(capture.output(str(infert[, 1:6])), font = "fix")
+```
+
+
+## 2  Table 1: the study population
+
+A `TOne` table is written with an empty first header, the levels of
+categorical variables indented, the group columns right aligned and the
+p-values aligned at the decimal point. The test legend follows in a
+smaller font.
+
+```{r tone}
+d <- within(infert, {
+  case <- factor(case, labels = c("control", "case"))
+})
+
+t1 <- tOne(d[, c("age", "parity", "education", "induced", "spontaneous")],
+           groups = d$case)
+
+toWrd("Study population\n", style = wdConst$wdStyleHeading1)
+toWrd(t1, bookmark = "bmtTableOne")
+```
+
+Options: `indent` (string for the indentation of the levels, default
+three non-breaking spaces), `legend = FALSE`, `align`, `font`:
+
+```{r tone-options}
+toWrd(t1, indent = "    ", legend = FALSE,
+      font = list(name = "Calibri", size = 9))
+```
+
+
+## 3  Frequency tables and matrices
+
+Tables are written like matrices, 1-dimensional ones as a frequency
+column. `labels` relabels the row names, `digits` sets the common number
+of decimals:
+
+```{r table}
+tab <- table(education = d$education, case = d$case)
+toWrd(tab, labels = c("0-5yrs"  = "0–5 years",
+                      "6-11yrs" = "6–11 years",
+                      "12+ yrs" = "12 years or more"))
+
+# row percentages
+toWrd(prop.table(tab, 1) * 100, digits = 1, rowtitle = "Education (%)")
+
+# 1-dimensional
+toWrd(table(parity = d$parity), freqtitle = "n")
+```
+
+Any matrix, e.g. correlations, without row names or with a title for the
+row name column:
+
+```{r matrix}
+cm <- cor(d[, c("age", "parity", "induced", "spontaneous")])
+toWrd(cm, digits = 2, rowtitle = "Correlation")
+toWrd(cm, rownames = FALSE, align = "r")
+```
+
+
+## 4  Models
+
+Two logistic regression models, compared with `tMod()`: the coefficients
+and, below a rule, the model statistics. `labels` applies to both,
+`verbose = TRUE` adds all statistics.
+
+```{r models}
+fit1 <- glm(case ~ age + parity + induced + spontaneous,
+            data = d, family = binomial)
+fit2 <- update(fit1, . ~ . - age)
+
+lbl <- c("(Intercept)" = "Intercept",
+         age         = "Age (years)",
+         parity      = "Parity",
+         induced     = "Induced abortions",
+         spontaneous = "Spontaneous abortions",
+         McFadden    = "McFadden R²")
+
+toWrd("Risk factors\n", style = wdConst$wdStyleHeading1)
+toWrd(tMod(full = fit1, reduced = fit2), labels = lbl,
+      rowtitle = "Coefficients", bookmark = "bmtModels")
+
+# more statistics, other formats
+toWrd(tMod(full = fit1, reduced = fit2), labels = lbl, verbose = TRUE,
+      digits = 2, naForm = "")
+```
+
+
+## 5  Any data.frame
+
+The table layout used above is that of the data.frame method, which can be
+used directly. By default the first column is left aligned and all others
+are aligned at the decimal point; the header has a rule above and below,
+the table one at its end.
+
+```{r dataframe}
+or <- exp(cbind(OR = coef(fit1), suppressMessages(confint(fit1))))[-1, ]
+res <- data.frame(
+  Factor = lbl[rownames(or)],
+  OR     = sprintf("%.2f", or[, 1]),
+  CI     = sprintf("%.2f to %.2f", or[, 2], or[, 3]),
+  p      = format.pval(coef(summary(fit1))[-1, 4], digits = 2, eps = 0.001)
+)
+
+toWrd(res)
+```
+
+The layout options:
+
+```{r dataframe-options}
+toWrd(res,
+      font    = list(name = "Arial Narrow", size = 9),
+      align   = c("l", "d", "c", "d"),   # l, c, r, d (decimal), recycled
+      halign  = "r",                     # header of the decimal columns
+      decpos  = c(20, 15),               # decimal tab positions (points)
+      spacing = c(before = 0, after = 0, line = 1),
+      na      = "–",
+      autofit = TRUE)
+```
+
+Before writing, `symbols` replaces character sequences by their
+typographic counterparts: minus signs (but not hyphens in words),
+`<=`, `>=`, `!=`, `=>`, `->`, `+/-`, `...`, ranges `1--5`, `2 x 3`, and it
+keeps `p < 0.001` together with non-breaking spaces. The map can be
+extended or replaced, `symbols = FALSE` switches it off:
+
+```{r symbols}
+wrdSymbolMap()
+
+toWrd(data.frame(Test = "chi2 => p <= 0.05", Diff = "-1.2 +/- 0.3"),
+      symbols = c(wrdSymbolMap(), "chi2" = "χ²"))
+
+toWrd(res, symbols = FALSE)
+```
+
+
+## 6  Plots
+
+Base graphics code is captured with `wrdPlot()` and drawn anew at the
+requested size (cm), so fonts keep their size in the document. ggplot2
+and lattice objects are written directly, `recordPlot()` takes the
+current plot from the screen.
+
+```{r plots}
+toWrd("Figures\n", style = wdConst$wdStyleHeading1)
+
+toWrd(wrdPlot({
+  boxplot(age ~ case, data = d, col = "grey90", ylab = "Age (years)")
+  abline(h = median(d$age), lty = 2)
+}), width = 10, bookmark = "bmpAge")
+
+# the current plot on the screen
+plot(spontaneous ~ jitter(age), data = d)
+toWrd(recordPlot(), width = 12, asp = 0.5)
+
+# ggplot2, as vector graphics
+library(ggplot2)
+p <- ggplot(d, aes(age, fill = case)) + geom_density(alpha = 0.4)
+toWrd(p, type = "emf", width = 14)
+```
+
+Picture options: `width`, `height` (default `width * asp`), `asp`,
+`type` (`"png"`, `"emf"`, `"svg"`), `res` (dpi for png), `pointsize`,
+`align` (`"c"`, `"l"`, `"r"`) and `newpara` (paragraph mark after the
+picture).
+
+```{r plot-options}
+toWrd(wrdPlot(hist(d$age, main = "")), width = 8, height = 5,
+      res = 600, pointsize = 9, align = "l", newpara = FALSE)
+```
+
+
+## 7  Updating the report
+
+All outputs above with a `bookmark` can be replaced in place. Suppose the
+data are corrected or the model changes: re-running the same calls
+updates the tables and the figure at their positions in the document,
+while the text written by hand around them is kept.
+
+```{r update}
+d$age[d$age > 44] <- 44                       # e.g. a data correction
+
+toWrd(tOne(d[, c("age", "parity", "education", "induced", "spontaneous")],
+           groups = d$case),
+      bookmark = "bmtTableOne")
+
+fit1 <- update(fit1, . ~ . + education)
+toWrd(tMod(full = fit1, reduced = fit2), labels = lbl,
+      rowtitle = "Coefficients", bookmark = "bmtModels")
+
+toWrd(wrdPlot(boxplot(age ~ case, data = d, col = "grey90")),
+      width = 10, bookmark = "bmpAge")
+```
+
+`bookmark = TRUE` generates a name (`bmt...` for text and tables,
+`bmp...` for plots), returned invisibly. The bookmarks of the document:
+
+```{r bookmarks}
+nm <- toWrd(summary(fit1), font = "fix", bookmark = TRUE)
+nm
+
+wrdBookmarks()
+wrdGoto("bmtModels")              # move the cursor there
+wrdDeleteBookmark(nm)             # the bookmark, not its content
+```
+
+In RStudio the addins *To Word (with Bookmark)* and *To Word Plot (with
+Bookmark)* send the selected code to Word in a generated bookmark and add
+its name as comment above the code (`## BookmarkName: bmt123456789`).
+Selecting this block later and running *Bookmark Update* replaces the
+output in the document; *Bookmark Recreate Chunk* creates the bookmark at
+the cursor first, if it is missing.
+
+
+## 8  Save and close
+
+```{r close}
+wrd[["ActiveDocument"]]$SaveAs2(file.path(getwd(), "infert-report.docx"))
+closeWrd()
+```
